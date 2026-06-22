@@ -10,6 +10,7 @@ from MetaMarkCEO import MetaMarkCEO
 from ResearchAgent import ResearchAgent
 from FacebookPolicyAgent import FacebookPolicyAgent
 from ClientApprovalAgent import ClientApprovalAgent
+from CampaignOpsAgent import CampaignOpsAgent
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,6 +22,7 @@ facebookManagerAgent = FacebookManagerAgent()
 researchAgent = ResearchAgent()
 facebookPolicyAgent = FacebookPolicyAgent()
 clientApprovalAgent = ClientApprovalAgent()
+campaignOpsAgent = CampaignOpsAgent()
 
 agency = Agency([
                   ceo,
@@ -30,13 +32,16 @@ agency = Agency([
                  [ceo, imageCreatorAgent],
                  [ceo, facebookPolicyAgent],
                  [ceo, clientApprovalAgent],
+                 [ceo, campaignOpsAgent],
                  [adCopyAgent, imageCreatorAgent],
                  [imageCreatorAgent, facebookPolicyAgent],
                  [facebookPolicyAgent, ceo],
                  [facebookPolicyAgent, clientApprovalAgent],
                  [clientApprovalAgent, ceo],
                  [clientApprovalAgent, facebookManagerAgent],
-                 [facebookManagerAgent, ceo]],
+                 [facebookManagerAgent, ceo],
+                 [facebookManagerAgent, campaignOpsAgent],
+                 [campaignOpsAgent, ceo]],
                 shared_instructions='./agency_manifesto.md')
 
 

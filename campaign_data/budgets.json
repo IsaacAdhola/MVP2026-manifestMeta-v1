@@ -1,0 +1,30 @@
+{
+  "clients": {
+    "acmecorp": {
+      "display_name": "AcmeCorp",
+      "total_budget": 50000.0,
+      "currency": "USD",
+      "total_spent": 41250.0,
+      "spend_log": [
+        {
+          "campaign_id": "b7272d8c-f533-4c6c-b8ea-cf1bd34b0ad1",
+          "post_id": "1adabc11-61b6-4411-b434-f0ccf8dc1dbf",
+          "amount": 1250.0,
+          "currency": "USD",
+          "recorded_at": "2026-06-22T17:44:36.740648+00:00",
+          "notes": null
+        },
+        {
+          "campaign_id": null,
+          "post_id": null,
+          "amount": 40000.0,
+          "currency": "USD",
+          "recorded_at": "2026-06-22T17:44:36.764415+00:00",
+          "notes": null
+        }
+      ],
+      "set_at": "2026-06-22T17:44:36.728741+00:00",
+      "notes": null
+    }
+  }
+}
