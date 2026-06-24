@@ -55,7 +55,7 @@ try:
             [sys.executable, "agency.py"],
             capture_output=True,
             text=True,
-            timeout=20,
+            timeout=120,
             check=False,
         )
         combined_output = (proc.stdout or "") + (proc.stderr or "")

@@ -73,7 +73,7 @@ class FacebookTokenDiagnostics(BaseTool):
                 # PAGE tokens cannot call /me/accounts — verify the page directly instead.
                 page_data = self._get_json(
                     f"https://graph.facebook.com/{page_id}",
-                    {"access_token": access_token, "fields": "id,name,tasks"},
+                    {"access_token": access_token, "fields": "id,name"},
                 )
                 if page_data.get("error"):
                     result["accounts_lookup"] = {
@@ -86,7 +86,7 @@ class FacebookTokenDiagnostics(BaseTool):
                         "note": "PAGE token: used direct page lookup instead of /me/accounts.",
                         "target_page_found": str(page_data.get("id")) == page_id,
                         "page_name": page_data.get("name", ""),
-                        "target_page_tasks": page_data.get("tasks", []),
+                        "target_page_tasks": [],
                     }
             else:
                 accounts = self._get_json(

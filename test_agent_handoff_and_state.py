@@ -242,9 +242,9 @@ def test_client_choice_option_contract() -> None:
     ceo_text = pathlib.Path("MetaMarkCEO/instructions.md").read_text(encoding="utf-8").lower()
     creative_text = pathlib.Path("ImageCreatorAgent/instructions.md").read_text(encoding="utf-8").lower()
     copy_text = pathlib.Path("AdCopyAgent/instructions.md").read_text(encoding="utf-8").lower()
-    assert_true("choose one option" in ceo_text, "CEO must ask client to choose an option")
+    assert_true("ask the client to choose" in ceo_text, "CEO must ask client to choose an option")
     assert_true("three image options" in creative_text, "Creative must create three image options")
-    assert_true("three client-facing copy samples" in copy_text, "Copy must create three copy samples")
+    assert_true("three client-facing options" in copy_text, "Copy must create three copy samples")
     print("   [OK] copy and image option contracts")
 
 
