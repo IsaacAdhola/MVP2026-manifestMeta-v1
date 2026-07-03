@@ -64,7 +64,6 @@ class FacebookPagePostPublisher(BaseTool):
             page = Page(page_id)
             response = page.create_feed(params=payload)
             post_id = response.get("id", "")
-            self._shared_state.set("page_post_id", post_id)
             set_state_value("page_post_id", post_id)
             return (
                 f"Page post published successfully. Post ID: {post_id}. "

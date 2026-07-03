@@ -15,6 +15,7 @@ try:
     from ResearchAgent import ResearchAgent
     from FacebookPolicyAgent import FacebookPolicyAgent
     from ClientApprovalAgent import ClientApprovalAgent
+    from CampaignOpsAgent import CampaignOpsAgent
     from dotenv import load_dotenv
     print("   [OK] All imports successful")
     
@@ -43,29 +44,42 @@ try:
 
     clientApprovalAgent = ClientApprovalAgent()
     print("   [OK] ClientApprovalAgent created")
+
+    campaignOpsAgent = CampaignOpsAgent()
+    print("   [OK] CampaignOpsAgent created")
     
     print("\n4. Creating agency...")
-    agency = Agency([
-                      ceo,
-                     [ceo, researchAgent],
-                     [researchAgent, ceo],
-                     [ceo, adCopyAgent],
-                     [adCopyAgent, imageCreatorAgent],
-                     [ceo, imageCreatorAgent],
-                     [ceo, facebookPolicyAgent],
-                     [ceo, clientApprovalAgent],
-                     [imageCreatorAgent, facebookPolicyAgent],
-                     [facebookPolicyAgent, ceo],
-                     [facebookPolicyAgent, clientApprovalAgent],
-                     [clientApprovalAgent, ceo],
-                     [clientApprovalAgent, facebookManagerAgent],
-                     [facebookManagerAgent, ceo]],
-                    shared_instructions='./agency_manifesto.md')
+    agency = Agency(
+        ceo,
+        communication_flows=[
+            [ceo, researchAgent],
+            [researchAgent, ceo],
+            [ceo, adCopyAgent],
+            [ceo, imageCreatorAgent],
+            [ceo, facebookPolicyAgent],
+            [ceo, clientApprovalAgent],
+            [ceo, campaignOpsAgent],
+            [adCopyAgent, imageCreatorAgent],
+            [imageCreatorAgent, facebookPolicyAgent],
+            [facebookPolicyAgent, ceo],
+            [facebookPolicyAgent, clientApprovalAgent],
+            [clientApprovalAgent, ceo],
+            [clientApprovalAgent, facebookManagerAgent],
+            [facebookManagerAgent, ceo],
+            [facebookManagerAgent, campaignOpsAgent],
+            [campaignOpsAgent, ceo],
+        ],
+        shared_instructions='./agency_manifesto.md',
+    )
     print("   [OK] Agency created successfully")
     
     print("\n5. Checking agency structure...")
     print(f"   - Entry point: {agency.entry_point.name if hasattr(agency, 'entry_point') else 'N/A'}")
-    print(f"   - Number of agents: {len(agency.agents) if hasattr(agency, 'agents') else 'N/A'}")
+    agent_count = len(agency.agents) if hasattr(agency, 'agents') else 0
+    print(f"   - Number of agents: {agent_count}")
+    if agent_count != 8:
+        raise RuntimeError(f"Expected 8 agents, found {agent_count}")
+    print("   [OK] All 8 agents wired in agency")
     
     print("\n" + "=" * 50)
     print("[SUCCESS] ALL TESTS PASSED - Agency is ready to run!")

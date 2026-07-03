@@ -24,25 +24,59 @@ facebookPolicyAgent = FacebookPolicyAgent()
 clientApprovalAgent = ClientApprovalAgent()
 campaignOpsAgent = CampaignOpsAgent()
 
-agency = Agency([
-                  ceo,
-                 [ceo, researchAgent],
-                 [researchAgent, ceo],
-                 [ceo, adCopyAgent],
-                 [ceo, imageCreatorAgent],
-                 [ceo, facebookPolicyAgent],
-                 [ceo, clientApprovalAgent],
-                 [ceo, campaignOpsAgent],
-                 [adCopyAgent, imageCreatorAgent],
-                 [imageCreatorAgent, facebookPolicyAgent],
-                 [facebookPolicyAgent, ceo],
-                 [facebookPolicyAgent, clientApprovalAgent],
-                 [clientApprovalAgent, ceo],
-                 [clientApprovalAgent, facebookManagerAgent],
-                 [facebookManagerAgent, ceo],
-                 [facebookManagerAgent, campaignOpsAgent],
-                 [campaignOpsAgent, ceo]],
-                shared_instructions='./agency_manifesto.md')
+_communication_flows = [
+    [ceo, researchAgent],
+    [researchAgent, ceo],
+    [ceo, adCopyAgent],
+    [ceo, imageCreatorAgent],
+    [ceo, facebookPolicyAgent],
+    [ceo, clientApprovalAgent],
+    [ceo, campaignOpsAgent],
+    [adCopyAgent, imageCreatorAgent],
+    [imageCreatorAgent, facebookPolicyAgent],
+    [facebookPolicyAgent, ceo],
+    [facebookPolicyAgent, clientApprovalAgent],
+    [clientApprovalAgent, ceo],
+    [clientApprovalAgent, facebookManagerAgent],
+    [facebookManagerAgent, ceo],
+    [facebookManagerAgent, campaignOpsAgent],
+    [campaignOpsAgent, ceo],
+]
+
+agency = Agency(
+    ceo,
+    communication_flows=_communication_flows,
+    shared_instructions='./agency_manifesto.md',
+)
+
+# Attach a demo_gradio helper so tests and ui_entry.py can call agency.demo_gradio(...)
+def _demo_gradio(server_name="127.0.0.1", server_port=7860, share=False, allowed_paths=None):
+    import gradio as gr
+
+    def _chat(message, history):
+        try:
+            result = agency.get_response_sync(message)
+            output = result.final_output
+            return str(output) if output is not None else "(no response)"
+        except Exception as exc:
+            return f"[Error] {exc}"
+
+    demo = gr.ChatInterface(
+        fn=_chat,
+        title="Manifest AI — Marketing Agency",
+        description=(
+            "Chat with the Chief Growth Strategist to plan your Facebook campaign.\n"
+            "All specialist work (research, creative, compliance, approval) runs in the background."
+        ),
+    )
+    demo.launch(
+        server_name=server_name,
+        server_port=server_port,
+        share=share,
+        allowed_paths=allowed_paths or [],
+    )
+
+agency.demo_gradio = _demo_gradio
 
 
 def _configure_console_encoding() -> None:
@@ -71,7 +105,8 @@ def _configure_console_encoding() -> None:
 if __name__ == '__main__':
     _configure_console_encoding()
 
-    if not sys.stdin.isatty():
+    noninteractive = os.environ.get("MANIFEST_AI_NONINTERACTIVE") or not sys.stdin.isatty()
+    if noninteractive:
         print(
             "Interactive input is not available. "
             "Run this script in a terminal to chat with the agency."
@@ -79,7 +114,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     try:
-        agency.run_demo()
+        agency.demo_gradio()
     except RuntimeError as exc:
         message = str(exc)
         if "Run still active after _ensure_no_active_run" in message:

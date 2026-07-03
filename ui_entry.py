@@ -97,7 +97,7 @@ def main() -> None:
         f"Generated images served from: {image_dir.resolve()}\n"
     )
 
-    # demo_gradio() is provided by the agency_swarm Agency class.
+    # demo_gradio() is attached to the agency instance in agency.py.
     # allowed_paths lets Gradio serve local image files so ![Option N](path)
     # markdown in the chatbot renders as an inline image the client can see.
     agency.demo_gradio(

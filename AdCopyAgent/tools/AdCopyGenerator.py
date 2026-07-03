@@ -1,13 +1,18 @@
 from agency_swarm.tools import BaseTool
-from agency_swarm.util import get_openai_client
 from pydantic import Field
 from dotenv import load_dotenv
+import openai
+import os
 import json
 import re
 import sys
 from workflow_state import set_state_value
 
 load_dotenv()
+
+
+def _get_openai_client():
+    return openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class AdCopyGenerator(BaseTool):
@@ -63,7 +68,7 @@ class AdCopyGenerator(BaseTool):
         return options
 
     def run(self):
-        client = get_openai_client()
+        client = _get_openai_client()
         sample_count = max(1, min(self.sample_count, 3))
         system_prompt = (
             "You are an expert Facebook ad copywriter. "
@@ -101,9 +106,6 @@ class AdCopyGenerator(BaseTool):
             copy_options = [{"headline": headline, "ad_copy": ad_copy, "rationale": ""}]
 
         selected = copy_options[0]
-        self._shared_state.set("ad_copy_options", copy_options)
-        self._shared_state.set("ad_headline", selected["headline"])
-        self._shared_state.set("ad_copy", selected["ad_copy"])
         set_state_value("ad_copy_options", copy_options)
         set_state_value("ad_headline", selected["headline"])
         set_state_value("ad_copy", selected["ad_copy"])

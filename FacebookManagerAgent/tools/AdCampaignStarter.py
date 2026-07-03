@@ -50,7 +50,6 @@ class AdCampaignStarter(BaseTool):
 
             }
             campaign = ad_account.create_campaign(params=params)
-            self._shared_state.set('campaign_id', campaign["id"])
             set_state_value("campaign_id", campaign["id"])
             return (
                 f'Ad campaign {self.campaign_name} has been successfully started '

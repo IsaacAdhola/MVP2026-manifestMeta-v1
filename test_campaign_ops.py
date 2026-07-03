@@ -3,6 +3,7 @@ Test suite for CampaignOpsAgent tools and agency integration.
 Tests: CampaignScheduler, PostTracker, BudgetManager, CampaignDashboard, agency import.
 """
 import sys, json, os
+from datetime import datetime, timedelta, timezone
 sys.path.insert(0, os.path.dirname(__file__))
 
 # Clean slate — remove test data files before run
@@ -42,9 +43,10 @@ check("create_campaign returns status=created", r.get("status") == "created", r)
 campaign_id = r["campaign"]["id"]
 check("campaign has a UUID id", len(campaign_id) == 36, campaign_id)
 
-# Add post 1 (future — scheduled)
+# Add post 1 (future — scheduled; use relative date so test stays valid over time)
+_future_time = (datetime.now(timezone.utc) + timedelta(days=30)).strftime("%Y-%m-%dT10:00:00Z")
 r = json.loads(CampaignScheduler(action="add_post", campaign_id=campaign_id,
-    platform="Facebook", scheduled_time="2026-07-01T10:00:00Z",
+    platform="Facebook", scheduled_time=_future_time,
     content_summary="Summer sale hero post").run())
 check("add_post returns status=post_added", r.get("status") == "post_added", r)
 post_id_1 = r["post"]["id"]

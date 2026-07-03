@@ -1,5 +1,4 @@
 from agency_swarm.tools import BaseTool
-from agency_swarm.util import get_openai_client
 from pydantic import Field
 from typing import Optional
 import openai
@@ -16,6 +15,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+
+def _get_openai_client():
+    return openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 _IMAGE_OUTPUT_DIR = _PROJECT_ROOT / "generated_assets" / "images"
@@ -71,7 +74,7 @@ class ImageGenerator(BaseTool):
         }
 
     def run(self):
-        client = get_openai_client().with_options(timeout=180)
+        client = _get_openai_client().with_options(timeout=180)
         image_count = max(1, min(self.image_count, 3))
         base_prompt = (
             f"Create an image that visually represents: {self.ad_copy}. "
@@ -91,8 +94,6 @@ class ImageGenerator(BaseTool):
             image_options.append(option)
 
         default_image_path = image_options[0]["image_path"]
-        self._shared_state.set("image_options", image_options)
-        self._shared_state.set("image_path", default_image_path)
         set_state_value("image_options", image_options)
         set_state_value("image_path", default_image_path)
 

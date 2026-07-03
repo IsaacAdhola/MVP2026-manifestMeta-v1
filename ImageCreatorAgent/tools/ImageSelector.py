@@ -1,7 +1,7 @@
 from agency_swarm.tools import BaseTool
 from pydantic import Field
 import json
-from workflow_state import set_state_value
+from workflow_state import set_state_value, get_state_value
 
 
 class ImageSelector(BaseTool):
@@ -16,7 +16,7 @@ class ImageSelector(BaseTool):
     )
 
     def run(self):
-        image_options = self._shared_state.get("image_options", [])
+        image_options = get_state_value("image_options") or []
 
         if not image_options:
             return json.dumps({
@@ -31,7 +31,6 @@ class ImageSelector(BaseTool):
             })
 
         selected_path = match["image_path"]
-        self._shared_state.set("image_path", selected_path)
         set_state_value("image_path", selected_path)
         set_state_value("selected_image_option", self.selected_option)
 

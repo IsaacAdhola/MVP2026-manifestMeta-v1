@@ -42,11 +42,11 @@ class AdCreator(BaseTool):
         try:
             initialize_business_sdk()
             ad_account_id = get_required_env("FACEBOOK_AD_ACCOUNT_ID")
-            image_path = self._shared_state.get('image_path') or get_state_value("image_path")
-            ad_set_id = self._shared_state.get('ad_set_id') or get_state_value("ad_set_id")
-            campaign_id = self._shared_state.get('campaign_id') or get_state_value("campaign_id")
-            ad_copy = self._shared_state.get('ad_copy') or get_state_value("ad_copy")
-            ad_headline = self._shared_state.get('ad_headline') or get_state_value("ad_headline")
+            image_path = get_state_value("image_path")
+            ad_set_id = get_state_value("ad_set_id")
+            campaign_id = get_state_value("campaign_id")
+            ad_copy = get_state_value("ad_copy")
+            ad_headline = get_state_value("ad_headline")
 
             if not image_path:
                 raise ValueError('Please tell Image Creator agent to generate an image first.')
@@ -97,11 +97,11 @@ class AdCreator(BaseTool):
 
 if __name__ == "__main__":
     import os
+    from workflow_state import set_state_value as _set
     tool = AdCreator(name="Test Creative 2", link="https://www.example.com")
-    # Set required shared_state values with actual test data
-    tool._shared_state.set('image_path', os.path.abspath('image.png'))
-    tool._shared_state.set('ad_set_id', '6867670805634')  # From AdSetCreator test
-    tool._shared_state.set('ad_copy', 'Join the sustainable style revolution without breaking the bank. Look good, feel good!')
-    tool._shared_state.set('ad_headline', 'Eco-Friendly Fashion for Less!')
-    tool._shared_state.set('campaign_id', '6867670459634')  # From AdCampaignStarter test
+    _set('image_path', os.path.abspath('image.png'))
+    _set('ad_set_id', '6867670805634')
+    _set('ad_copy', 'Join the sustainable style revolution without breaking the bank. Look good, feel good!')
+    _set('ad_headline', 'Eco-Friendly Fashion for Less!')
+    _set('campaign_id', '6867670459634')
     print(tool.run())

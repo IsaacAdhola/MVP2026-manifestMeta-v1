@@ -36,7 +36,7 @@ class AdSetCreator(BaseTool):
         try:
             initialize_business_sdk()
             ad_account_id = get_required_env("FACEBOOK_AD_ACCOUNT_ID")
-            campaign_id = self._shared_state.get('campaign_id') or get_state_value("campaign_id")
+            campaign_id = get_state_value("campaign_id")
             if not campaign_id:
                 raise ValueError('Campaign ID not found. Please use AdCampaignStarter tool first.')
 
@@ -59,7 +59,6 @@ class AdSetCreator(BaseTool):
                 "bid_amount": "100",
             }
             ad_set = ad_account.create_ad_set(params=params)
-            self._shared_state.set('ad_set_id', ad_set["id"])
             set_state_value("ad_set_id", ad_set["id"])
             return (
                 f'Ad set {self.name} has been successfully created '
@@ -69,7 +68,7 @@ class AdSetCreator(BaseTool):
             return f'Error creating ad set: {e}'
 
 if __name__ == "__main__":
+    from workflow_state import set_state_value as _set
     tool = AdSetCreator(name="Test Ad Set", budget=1000)
-    # Use the campaign_id from the last test (or update with actual campaign_id)
-    tool._shared_state.set('campaign_id', '6867670459634')
+    _set('campaign_id', '6867670459634')
     print(tool.run())
