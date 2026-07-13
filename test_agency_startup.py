@@ -13,8 +13,8 @@ try:
     print("   [OK] Agency initialized")
 
     agent_count = len(_imported_agency.agents) if hasattr(_imported_agency, "agents") else 0
-    if agent_count != 8:
-        raise RuntimeError(f"Expected 8 agents in agency, found {agent_count}")
+    if agent_count != 9:
+        raise RuntimeError(f"Expected 9 agents in agency, found {agent_count}")
     print(f"   [OK] All {agent_count} agents present")
 
     if not hasattr(_imported_agency, "demo_gradio"):

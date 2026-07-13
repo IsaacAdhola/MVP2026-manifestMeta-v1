@@ -18,6 +18,9 @@ from MetaMarkCEO import MetaMarkCEO
 from ResearchAgent import ResearchAgent
 from ResearchAgent.tools.AdLibraryPatternAnalyzer import AdLibraryPatternAnalyzer
 from ResearchAgent.tools.CompetitorResearchPlanBuilder import CompetitorResearchPlanBuilder
+from SearchVisibilityAgent import SearchVisibilityAgent
+from SearchVisibilityAgent.tools.ContentVisibilityChecklist import ContentVisibilityChecklist
+from SearchVisibilityAgent.tools.SearchVisibilityBriefBuilder import SearchVisibilityBriefBuilder
 from safe_audit_log import read_audit_events, sanitize_record, write_audit_event
 from workflow_state import clear_state, get_state_value, set_state_value
 
@@ -25,6 +28,7 @@ from workflow_state import clear_state, get_state_value, set_state_value
 AGENT_CLASSES = [
     ("Chief Growth Strategist", MetaMarkCEO),
     ("Market Intelligence Director", ResearchAgent),
+    ("Search & Answer Visibility Director", SearchVisibilityAgent),
     ("Senior Conversion Copywriter", AdCopyAgent),
     ("Creative Director", ImageCreatorAgent),
     ("Facebook Policy Compliance Officer", FacebookPolicyAgent),
@@ -35,6 +39,12 @@ AGENT_CLASSES = [
 REQUIRED_HANDOFFS = {
     ("ceo", "researchAgent"),
     ("researchAgent", "ceo"),
+    ("ceo", "searchVisibilityAgent"),
+    ("searchVisibilityAgent", "ceo"),
+    ("researchAgent", "searchVisibilityAgent"),
+    ("searchVisibilityAgent", "researchAgent"),
+    ("searchVisibilityAgent", "adCopyAgent"),
+    ("adCopyAgent", "searchVisibilityAgent"),
     ("ceo", "adCopyAgent"),
     ("ceo", "imageCreatorAgent"),
     ("ceo", "facebookPolicyAgent"),

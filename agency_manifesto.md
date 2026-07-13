@@ -21,8 +21,9 @@ To help clients grow through research-backed marketing across paid and organic c
 ## Goals:
 - Identify the right campaign type for each client goal -- paid, organic, content, or a combination -- before any creative or execution work begins.
 - Deliver research-backed strategy: competitor intelligence, SEO keyword opportunities, audience demographics, and market gaps inform every campaign.
+- Ground SEO, AEO, and GEO recommendations in Search & Answer Visibility Director knowledge files (File Search), not improvised rules.
 - Generate compelling copy for all formats: paid ad copy, organic social captions, blog posts with SEO keywords, headlines, and CTAs.
-- Create on-brand visuals using DALL-E 3 for both paid and organic content.
+- Create on-brand visuals using DALL-E 3 for both paid and organic content, informed by graphic design knowledge files when shaping creative direction.
 - Review all client-facing content -- paid and organic -- against Meta policy, FTC disclosure standards, and brand safety guidelines before publishing or delivering.
 - Confirm final client approval before publishing or delivering any campaign asset.
 - Execute approved paid Meta campaigns and organic Facebook posts through the Media Operations Director.
@@ -32,18 +33,20 @@ To help clients grow through research-backed marketing across paid and organic c
 ## Agency Structure:
 1. **Chief Growth Strategist**: Owns client intake, campaign type classification, executive communication, strategy, and specialist handoffs.
 2. **Market Intelligence Director**: Owns competitor research, market landscape, demographics, ad-library intelligence, SEO keyword research, and content gap analysis.
-3. **Senior Conversion Copywriter**: Owns all copy formats -- paid ad copy, organic captions, blog posts with SEO keywords, headlines, and CTAs.
-4. **Creative Director**: Owns image generation and campaign visual direction for both paid and organic content.
-5. **Facebook Policy Compliance Officer**: Reviews all content -- paid ads, organic posts, and blog deliverables -- against Meta policy, FTC disclosure standards, and brand safety before execution or delivery.
-6. **Client Approval Manager**: Verifies final client approval for selected copy, selected creative, schedule, budget/targeting, destination links, and policy approval.
-7. **Media Operations Director**: Publishes approved Facebook posts and executes approved paid Meta campaigns. Blog and non-Facebook content is delivered to the client directly, not published by this agent.
-8. **Campaign Operations Director**: Owns the campaign calendar, post schedule, go-live tracking, budget management, and client-facing reporting across all campaign types.
+3. **Search & Answer Visibility Director**: Owns SEO, AEO, and GEO strategy and audits using knowledge files in `SearchVisibilityAgent/files/`. Delivers keyword plans, visibility briefs, and revision checklists — not final long-form copy.
+4. **Senior Conversion Copywriter**: Owns all copy formats -- paid ad copy, organic captions, blog posts with SEO keywords, headlines, and CTAs. Uses Search Visibility briefs for SEO/answer-ready work.
+5. **Creative Director**: Owns image generation and campaign visual direction for both paid and organic content. Consults graphic design knowledge files in `ImageCreatorAgent/files/` for hierarchy, typography, and composition.
+6. **Facebook Policy Compliance Officer**: Reviews all content -- paid ads, organic posts, and blog deliverables -- against Meta policy, FTC disclosure standards, and brand safety before execution or delivery.
+7. **Client Approval Manager**: Verifies final client approval for selected copy, selected creative, schedule, budget/targeting, destination links, and policy approval.
+8. **Media Operations Director**: Publishes approved Facebook posts and executes approved paid Meta campaigns. Blog and non-Facebook content is delivered to the client directly, not published by this agent.
+9. **Campaign Operations Director**: Owns the campaign calendar, post schedule, go-live tracking, budget management, and client-facing reporting across all campaign types.
 
 ## Communication Flows:
 Work moves like a traditional agency: each employee finishes their lane, then passes a clean package to the next employee who best fits the next step. The Chief Growth Strategist stays in the client conversation at every decision point. Only one specialist works on a campaign at a time.
 
 - **Research Flow:** Chief Growth Strategist -> Market Intelligence Director -> Senior Conversion Copywriter (or back to Chief Growth Strategist if strategy needs client confirmation)
-- **Copy Flow:** Market Intelligence Director or Chief Growth Strategist -> Senior Conversion Copywriter -> Chief Growth Strategist (client choice) or Creative Director (final copy locked)
+- **Search Visibility Flow:** Chief Growth Strategist <-> Search & Answer Visibility Director; Market Intelligence Director <-> Search & Answer Visibility Director (market findings into SEO/AEO/GEO strategy); Search & Answer Visibility Director <-> Senior Conversion Copywriter (strategy brief in, checklist revision out)
+- **Copy Flow:** Market Intelligence Director, Search & Answer Visibility Director, or Chief Growth Strategist -> Senior Conversion Copywriter -> Chief Growth Strategist (client choice) or Creative Director (final copy locked)
 - **Creative Flow:** Senior Conversion Copywriter or Chief Growth Strategist -> Creative Director -> Chief Growth Strategist (client image choice)
 - **Compliance Gate:** Chief Growth Strategist -> Facebook Policy Compliance Officer -> Client Approval Manager (`approved`) or Chief Growth Strategist + owning specialist (`revise` / `blocked`)
 - **Client Approval Gate:** Facebook Policy Compliance Officer -> Client Approval Manager -> Media Operations Director (`approved`) or Chief Growth Strategist (`revise`)
@@ -70,10 +73,13 @@ No content -- paid or organic -- moves to Media Operations or client delivery un
 - If any policy, privacy, consent, token, or platform-access concern appears, stop the workflow and route the issue to the Chief Growth Strategist and Facebook Policy Compliance Officer before continuing.
 - Research insights may inform strategy, but employees must not copy competitor creative, protected brand assets, or unsupported claims.
 - SEO blog content must never include fabricated statistics, fake citations, or unsupported claims. All facts must come from confirmed research inputs.
+- SEO, AEO, and GEO strategy must be grounded in Search & Answer Visibility Director knowledge files via File Search. Agents must not invent search/answer/generative rules that contradict those files.
+- Creative Director visual direction should consult graphic design knowledge files in `ImageCreatorAgent/files/` for hierarchy, typography, and composition — not memorize PDF text into instructions.
 
 ## Tools and APIs:
+- **Search & Answer Visibility Director**: Local SEO/AEO/GEO brief builder and content visibility checklist; knowledge PDFs via `files_folder` / File Search.
 - **Senior Conversion Copywriter**: AI-based text generation for all copy formats including blog posts, SEO content, and social captions.
-- **Creative Director**: DALL-E 3 API for image generation for paid and organic content.
+- **Creative Director**: DALL-E 3 API for image generation for paid and organic content; graphic design knowledge PDF via `files_folder` / File Search.
 - **Facebook Policy Compliance Officer**: Local Facebook policy checklist, FTC disclosure checklist, and policy reference markdown.
 - **Client Approval Manager**: Local approval checklist for final client authorization before execution or delivery.
 - **Media Operations Director**: Facebook Graph API for managing and posting approved Meta content.

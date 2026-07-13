@@ -16,6 +16,7 @@ try:
     from FacebookPolicyAgent import FacebookPolicyAgent
     from ClientApprovalAgent import ClientApprovalAgent
     from CampaignOpsAgent import CampaignOpsAgent
+    from SearchVisibilityAgent import SearchVisibilityAgent
     from dotenv import load_dotenv
     print("   [OK] All imports successful")
     
@@ -47,6 +48,9 @@ try:
 
     campaignOpsAgent = CampaignOpsAgent()
     print("   [OK] CampaignOpsAgent created")
+
+    searchVisibilityAgent = SearchVisibilityAgent()
+    print("   [OK] SearchVisibilityAgent created")
     
     print("\n4. Creating agency...")
     agency = Agency(
@@ -54,7 +58,13 @@ try:
         communication_flows=[
             [ceo, researchAgent],
             [researchAgent, ceo],
+            [ceo, searchVisibilityAgent],
+            [searchVisibilityAgent, ceo],
+            [researchAgent, searchVisibilityAgent],
+            [searchVisibilityAgent, researchAgent],
             [ceo, adCopyAgent],
+            [searchVisibilityAgent, adCopyAgent],
+            [adCopyAgent, searchVisibilityAgent],
             [ceo, imageCreatorAgent],
             [ceo, facebookPolicyAgent],
             [ceo, clientApprovalAgent],
@@ -77,9 +87,9 @@ try:
     print(f"   - Entry point: {agency.entry_point.name if hasattr(agency, 'entry_point') else 'N/A'}")
     agent_count = len(agency.agents) if hasattr(agency, 'agents') else 0
     print(f"   - Number of agents: {agent_count}")
-    if agent_count != 8:
-        raise RuntimeError(f"Expected 8 agents, found {agent_count}")
-    print("   [OK] All 8 agents wired in agency")
+    if agent_count != 9:
+        raise RuntimeError(f"Expected 9 agents, found {agent_count}")
+    print("   [OK] All 9 agents wired in agency")
     
     print("\n" + "=" * 50)
     print("[SUCCESS] ALL TESTS PASSED - Agency is ready to run!")
