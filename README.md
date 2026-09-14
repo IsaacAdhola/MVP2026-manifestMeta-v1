@@ -1,56 +1,89 @@
-# MetaMarkAgency
+# Manifest AI (ManifestMeta)
 
-Welcome to the **MetaMarkAgency** repository, a cutting-edge solution designed to automate and enhance your Facebook marketing efforts using the power of AI. This SmmA agency is built upon the **Agency Swarm** framework, enabling the creation of specialized agents to handle different aspects of Facebook marketing: generating ad copy, creating images, and managing Facebook posts.
+Manifest AI is an architecture-first, test-led multi-agent system built on the
+[Agency Swarm](https://agency-swarm.ai) framework. A constellation of specialist agents plans and
+executes Facebook / Meta marketing campaigns behind a single client-facing strategist, with
+governance guardrails enforced at every stage.
 
-### Agency Structure
+## Agency structure
 
-The AI SmmA Live Agency is composed of three primary agents:
+The agency is composed of nine agents wired into an eight-stage pipeline. Only the Chief Growth
+Strategist talks to the client; every other agent runs as background delegation.
 
-- **Ad Copy Agent**: Generates compelling ad copy tailored to your campaign's goals.
-- **Image Creator Agent**: Utilizes Dalle 3 to create visually appealing images that complement the ad copy.
-- **Facebook Manager Agent**: Handles the posting of ads on Facebook, along with campaign and ad set creation.
+| Stage | Agent (`name=`) | Role |
+| --- | --- | --- |
+| 1 Intake | Chief Growth Strategist (`MetaMarkCEO`) | Client lead / orchestrator |
+| 2 Research | Market Intelligence Director (`ResearchAgent`) | Competitor + audience research |
+| — | Search & Answer Visibility Director (`SearchVisibilityAgent`) | SEO / AEO / GEO strategy |
+| 3 Copy | Senior Conversion Copywriter (`AdCopyAgent`) | Ad copy |
+| 4 Creative | Creative Director (`ImageCreatorAgent`) | DALL·E campaign visuals |
+| 5 Policy (gate) | Facebook Policy Compliance Officer (`FacebookPolicyAgent`) | Meta policy review |
+| 6 Approval (gate) | Client Approval Manager (`ClientApprovalAgent`) | Final client sign-off |
+| 7 Execution | Media Operations Director (`FacebookManagerAgent`) | Meta publishing / paid ops |
+| 8 Tracking | Campaign Operations Director (`CampaignOpsAgent`) | Schedule, budget, reporting |
 
-## Facebook App Setup
+Communication flows are defined in [`agency.py`](agency.py). Paid publishing is reachable only via
+`Client Approval Manager → Media Operations Director` — there is no direct CEO → Media edge.
 
-To utilize the Facebook Manager Agent for posting ads, you need to set up a Facebook app and obtain the necessary credentials and permissions. Follow these steps to get started:
+## Running the apps
 
-1. **Create Your Facebook App**:
-   - Visit the [Facebook for Developers](https://developers.facebook.com/) site and log in.
-   - Click on "My Apps" and select "Create App".
-   - Choose "Business" as your app type and provide a name for your app.
-   - Follow the prompts to complete the app creation process.
+Install dependencies (see also [`.cursor/environment.json`](.cursor/environment.json)):
 
-2. **Add the Marketing API**:
-   - In your app dashboard, find the "Add a Product" section and select "Marketing API".
-   - Click "Set Up" to add the Marketing API to your app.
+```bash
+pip install -r requirements.txt fastapi "uvicorn[standard]" websockets gradio pytest
+```
 
-3. **Configure App Settings**:
-   - Navigate to "Settings" > "Basic" in your app dashboard.
-   - Note your "App ID" and "App Secret" for later use.
-   - Add your app domain, privacy policy URL, and other required details.
+Then launch one of the entry points:
 
-4. **Obtain Access Token**:
-   - Go to the [Facebook Graph API Explorer](https://developers.facebook.com/tools/explorer/).
-   - Select your app from the "Application" dropdown.
-   - Click "Generate Access Token" and grant the necessary permissions for ad management.
-   - Copy the generated access token for use in your agency setup.
+- `python ui_entry.py` — Gradio chat UI (default http://127.0.0.1:7860)
+- `python agency.py` — terminal / Gradio demo
+- `python web_bridge.py` — FastAPI + WebSocket bridge serving the Manifest AI web UI
+  (http://127.0.0.1:8000); see [docs/README-BRIDGE.md](docs/README-BRIDGE.md)
 
-5. **Update Environment File**:
-   - Copy `.env.example` to `.env` and fill in your actual values, OR
-   - Create an `.env` file in your project directory and add the required environment variables.
+All entry points require `OPENAI_API_KEY`. Runs default to the `staging` safety profile
+(`MANIFEST_AI_ENV=staging`), which blocks live external mutations — see [docs/STAGING.md](docs/STAGING.md).
 
-    ```env
-    OPENAI_API_KEY=your_openai_api_key
-    FACEBOOK_APP_ID=your_app_id
-    FACEBOOK_APP_SECRET=your_app_secret
-    FACEBOOK_ACCESS_TOKEN=your_access_token
-    FACEBOOK_AD_ACCOUNT_ID=your_ad_account_id
-    FACEBOOK_PAGE_ID=your_page_id
-    ```
-   
-   **Important**: Variable names in `.env` must exactly match what the code expects. See `CONFIG_REFERENCE.md` for a complete mapping of variable names and their usage.
+## Configuration
 
-6. **Install Facebook Business SDK** (if required by your tools):
-   - Run the following command to install the SDK:
+Copy `.env.example` to `.env` and fill in your values:
 
-   
+```env
+OPENAI_API_KEY=your_openai_api_key
+FACEBOOK_APP_ID=your_app_id
+FACEBOOK_APP_SECRET=your_app_secret
+FACEBOOK_ACCESS_TOKEN=your_access_token
+FACEBOOK_AD_ACCOUNT_ID=your_ad_account_id
+FACEBOOK_PAGE_ID=your_page_id
+SCRAPE_CREATORS_API_KEY=your_scrapecreators_key
+```
+
+Variable names must match exactly what the code reads via `os.getenv(...)`. See
+[docs/CONFIG_REFERENCE.md](docs/CONFIG_REFERENCE.md) for the complete mapping. `OPENAI_API_KEY` is
+required; the `FACEBOOK_*` and `SCRAPE_CREATORS_API_KEY` values are only needed for the execution
+and live-research stages.
+
+### Facebook Marketing API setup
+
+To exercise the Media Operations stage you need a Facebook app with the Marketing API:
+
+1. Create a Business app at [Facebook for Developers](https://developers.facebook.com/).
+2. Add the **Marketing API** product to the app.
+3. From **Settings → Basic**, copy the **App ID** and **App Secret**.
+4. Generate an access token with ad-management permissions via the
+   [Graph API Explorer](https://developers.facebook.com/tools/explorer/).
+5. Find your Ad Account ID (format `act_123456789`) in Ads Manager and your Page ID in Page settings.
+6. Put all values in `.env` as shown above. The Facebook Business SDK is installed via
+   `requirements.txt` (`facebook_business`).
+
+## Documentation
+
+- [docs/AGENCY_SWARM_SETUP.md](docs/AGENCY_SWARM_SETUP.md) — Agency Swarm framework references
+- [docs/CONFIG_REFERENCE.md](docs/CONFIG_REFERENCE.md) — environment variable mapping
+- [docs/GUARDRAILS.md](docs/GUARDRAILS.md) — enforced governance invariants
+- [docs/STAGING.md](docs/STAGING.md) — staging vs production safety profiles
+- [docs/GO-LIVE-RUNBOOK.md](docs/GO-LIVE-RUNBOOK.md) — production go-live procedure
+- [docs/README-BRIDGE.md](docs/README-BRIDGE.md) — live web bridge architecture
+- [docs/TESTING.md](docs/TESTING.md) — test suite and how to run it
+- [docs/adr/](docs/adr/) — Architecture Decision Records
+- [agency_manifesto.md](agency_manifesto.md) — shared agency mission and context
+```

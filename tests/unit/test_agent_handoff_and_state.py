@@ -5,6 +5,8 @@ import importlib
 import pathlib
 import sys
 
+import pytest
+
 from AdCopyAgent import AdCopyAgent
 from AdCopyAgent.tools.AdCopyGenerator import AdCopyGenerator
 from ClientApprovalAgent import ClientApprovalAgent
@@ -72,6 +74,7 @@ def assert_true(condition: bool, message: str) -> None:
         raise AssertionError(message)
 
 
+@pytest.mark.requires_openai
 def test_agent_instantiation() -> None:
     print("\n1. Testing employee instantiation...")
     for expected_name, agent_cls in AGENT_CLASSES:

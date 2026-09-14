@@ -14,14 +14,15 @@ if _WORKSPACE_DIR not in sys.path:
     sys.path.insert(0, _WORKSPACE_DIR)
 
 from workflow_state import get_state_value, set_state_value
+from config import live_mutations_allowed, staging_block_notice
 
 try:
-    from ..facebook_auth import get_page_access_token, get_required_env, initialize_business_sdk
+    from ..lib.facebook_auth import get_page_access_token, get_required_env, initialize_business_sdk
 except ImportError:
     _PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if _PARENT_DIR not in sys.path:
         sys.path.insert(0, _PARENT_DIR)
-    from facebook_auth import get_page_access_token, get_required_env, initialize_business_sdk
+    from lib.facebook_auth import get_page_access_token, get_required_env, initialize_business_sdk
 
 load_dotenv()
 
@@ -48,6 +49,8 @@ class FacebookPhotoPostPublisher(BaseTool):
         return str(path.resolve())
 
     def run(self):
+        if not live_mutations_allowed():
+            return staging_block_notice("FacebookPhotoPostPublisher")
         page_id = get_required_env("FACEBOOK_PAGE_ID")
         env = initialize_business_sdk()
         page_token, meta = get_page_access_token(env["access_token"], page_id)
