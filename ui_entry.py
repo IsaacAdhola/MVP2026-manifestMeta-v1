@@ -83,45 +83,7 @@ def main() -> None:
 
     # Import agency here so environment is already loaded
     print("[ui_entry] Importing agency (this can take a minute)...")
-    # #region agent log
-    try:
-        import json as _json
-        import time as _time
-        from pathlib import Path as _Path
-        _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-        with open(_log, "a", encoding="utf-8") as _f:
-            _f.write(_json.dumps({
-                "sessionId": "9c2ba9",
-                "runId": "pre-fix",
-                "hypothesisId": "F",
-                "location": "ui_entry.py:main:before_import",
-                "message": "about to import agency",
-                "data": {"host": args.host, "port": args.port},
-                "timestamp": int(_time.time() * 1000),
-            }, ensure_ascii=True) + "\n")
-    except Exception:
-        pass
-    # #endregion
     from agency import agency  # noqa: PLC0415
-    # #region agent log
-    try:
-        import json as _json
-        import time as _time
-        from pathlib import Path as _Path
-        _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-        with open(_log, "a", encoding="utf-8") as _f:
-            _f.write(_json.dumps({
-                "sessionId": "9c2ba9",
-                "runId": "pre-fix",
-                "hypothesisId": "F",
-                "location": "ui_entry.py:main:after_import",
-                "message": "agency import complete",
-                "data": {"agent_count": len(getattr(agency, "agents", []) or [])},
-                "timestamp": int(_time.time() * 1000),
-            }, ensure_ascii=True) + "\n")
-    except Exception:
-        pass
-    # #endregion
     print("[ui_entry] Agency imported. Launching Gradio...")
 
     # Ensure the image output folder exists so Gradio can whitelist it.

@@ -9,7 +9,7 @@ from facebook_business.adobjects.adset import AdSet
 from dotenv import load_dotenv
 from workflow_state import get_state_value, set_state_value
 try:
-    from ..facebook_auth import get_required_env, initialize_business_sdk
+    from ..lib.facebook_auth import get_required_env, initialize_business_sdk
 except ImportError:
     import os
     import sys
@@ -17,7 +17,7 @@ except ImportError:
     _PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if _PARENT_DIR not in sys.path:
         sys.path.insert(0, _PARENT_DIR)
-    from facebook_auth import get_required_env, initialize_business_sdk
+    from lib.facebook_auth import get_required_env, initialize_business_sdk
 
 load_dotenv()
 

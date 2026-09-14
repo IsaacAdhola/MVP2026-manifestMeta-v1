@@ -2,7 +2,7 @@ from agency_swarm.tools import BaseTool
 from pydantic import Field
 
 try:
-    from ..ad_library_api import graph_get, json_list, normalize_list
+    from ..lib.ad_library_api import graph_get, json_list, normalize_list
 except ImportError:
     import os
     import sys
@@ -10,7 +10,7 @@ except ImportError:
     _PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if _PARENT_DIR not in sys.path:
         sys.path.insert(0, _PARENT_DIR)
-    from ad_library_api import graph_get, json_list, normalize_list
+    from lib.ad_library_api import graph_get, json_list, normalize_list
 
 
 DEFAULT_FIELDS = [

@@ -12,7 +12,6 @@ class CampaignOpsAgent(Agent):
             ),
             model="gpt-4o",
             instructions="./instructions.md",
-            files_folder="./files",
             schemas_folder="./schemas",
             tools=[],
             tools_folder="./tools",

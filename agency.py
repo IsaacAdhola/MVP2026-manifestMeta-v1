@@ -63,55 +63,9 @@ def _demo_gradio(server_name="127.0.0.1", server_port=7860, share=False, allowed
     from pathlib import Path as _Path
 
     def _chat(message, history):
-        # #region agent log
-        try:
-            import json as _json
-            import time as _time
-            _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-            with open(_log, "a", encoding="utf-8") as _f:
-                _f.write(_json.dumps({
-                    "sessionId": "9c2ba9",
-                    "runId": "pre-fix",
-                    "hypothesisId": "C",
-                    "location": "agency.py:_chat:entry",
-                    "message": "gradio chat received",
-                    "data": {
-                        "msg_len": len(message or ""),
-                        "msg_preview": (message or "")[:120],
-                        "history_len": len(history or []),
-                    },
-                    "timestamp": int(_time.time() * 1000),
-                }, ensure_ascii=True) + "\n")
-        except Exception:
-            pass
-        # #endregion
         try:
             result = agency.get_response_sync(message)
             output = str(result.final_output) if result.final_output is not None else "(no response)"
-            # #region agent log
-            try:
-                import re as _re
-                import json as _json
-                import time as _time
-                _imgs = _re.findall(r"!\[[^\]]*\]\(([^)]+)\)", output or "")
-                _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-                with open(_log, "a", encoding="utf-8") as _f:
-                    _f.write(_json.dumps({
-                        "sessionId": "9c2ba9",
-                        "runId": "pre-fix",
-                        "hypothesisId": "C",
-                        "location": "agency.py:_chat:exit",
-                        "message": "gradio chat response",
-                        "data": {
-                            "output_len": len(output or ""),
-                            "markdown_image_paths": _imgs[:5],
-                            "unique_image_paths": len(set(_imgs)),
-                        },
-                        "timestamp": int(_time.time() * 1000),
-                    }, ensure_ascii=True) + "\n")
-            except Exception:
-                pass
-            # #endregion
             return output
         except Exception as exc:
             return f"[Error] {exc}"
@@ -119,24 +73,6 @@ def _demo_gradio(server_name="127.0.0.1", server_port=7860, share=False, allowed
     _default_allowed = allowed_paths or [
         str(_Path(__file__).resolve().parent / "generated_assets" / "images"),
     ]
-    # #region agent log
-    try:
-        import json as _json
-        import time as _time
-        _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-        with open(_log, "a", encoding="utf-8") as _f:
-            _f.write(_json.dumps({
-                "sessionId": "9c2ba9",
-                "runId": "pre-fix",
-                "hypothesisId": "C",
-                "location": "agency.py:_demo_gradio:launch",
-                "message": "launching gradio with allowed_paths",
-                "data": {"allowed_paths": _default_allowed},
-                "timestamp": int(_time.time() * 1000),
-            }, ensure_ascii=True) + "\n")
-    except Exception:
-        pass
-    # #endregion
     demo = gr.ChatInterface(
         fn=_chat,
         title="Manifest AI — Marketing Agency",
@@ -145,28 +81,6 @@ def _demo_gradio(server_name="127.0.0.1", server_port=7860, share=False, allowed
             "All specialist work (research, creative, compliance, approval) runs in the background."
         ),
     )
-    # #region agent log
-    try:
-        import json as _json
-        import time as _time
-        _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-        with open(_log, "a", encoding="utf-8") as _f:
-            _f.write(_json.dumps({
-                "sessionId": "9c2ba9",
-                "runId": "pre-fix",
-                "hypothesisId": "F",
-                "location": "agency.py:_demo_gradio:before_launch",
-                "message": "about to call demo.launch",
-                "data": {
-                    "server_name": server_name,
-                    "server_port": server_port,
-                    "allowed_paths": _default_allowed,
-                },
-                "timestamp": int(_time.time() * 1000),
-            }, ensure_ascii=True) + "\n")
-    except Exception:
-        pass
-    # #endregion
     demo.launch(
         server_name=server_name,
         server_port=server_port,
