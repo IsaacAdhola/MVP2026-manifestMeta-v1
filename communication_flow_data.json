@@ -1,0 +1,218 @@
+{
+  "total_flows": 22,
+  "flows": [
+    {
+      "from": "ceo",
+      "to": "researchAgent"
+    },
+    {
+      "from": "researchAgent",
+      "to": "ceo"
+    },
+    {
+      "from": "ceo",
+      "to": "searchVisibilityAgent"
+    },
+    {
+      "from": "searchVisibilityAgent",
+      "to": "ceo"
+    },
+    {
+      "from": "researchAgent",
+      "to": "searchVisibilityAgent"
+    },
+    {
+      "from": "searchVisibilityAgent",
+      "to": "researchAgent"
+    },
+    {
+      "from": "ceo",
+      "to": "adCopyAgent"
+    },
+    {
+      "from": "searchVisibilityAgent",
+      "to": "adCopyAgent"
+    },
+    {
+      "from": "adCopyAgent",
+      "to": "searchVisibilityAgent"
+    },
+    {
+      "from": "ceo",
+      "to": "imageCreatorAgent"
+    },
+    {
+      "from": "ceo",
+      "to": "facebookPolicyAgent"
+    },
+    {
+      "from": "ceo",
+      "to": "clientApprovalAgent"
+    },
+    {
+      "from": "ceo",
+      "to": "campaignOpsAgent"
+    },
+    {
+      "from": "adCopyAgent",
+      "to": "imageCreatorAgent"
+    },
+    {
+      "from": "imageCreatorAgent",
+      "to": "facebookPolicyAgent"
+    },
+    {
+      "from": "facebookPolicyAgent",
+      "to": "ceo"
+    },
+    {
+      "from": "facebookPolicyAgent",
+      "to": "clientApprovalAgent"
+    },
+    {
+      "from": "clientApprovalAgent",
+      "to": "ceo"
+    },
+    {
+      "from": "clientApprovalAgent",
+      "to": "facebookManagerAgent"
+    },
+    {
+      "from": "facebookManagerAgent",
+      "to": "ceo"
+    },
+    {
+      "from": "facebookManagerAgent",
+      "to": "campaignOpsAgent"
+    },
+    {
+      "from": "campaignOpsAgent",
+      "to": "ceo"
+    }
+  ],
+  "outbound": {
+    "ceo": [
+      "researchAgent",
+      "searchVisibilityAgent",
+      "adCopyAgent",
+      "imageCreatorAgent",
+      "facebookPolicyAgent",
+      "clientApprovalAgent",
+      "campaignOpsAgent"
+    ],
+    "researchAgent": [
+      "ceo",
+      "searchVisibilityAgent"
+    ],
+    "searchVisibilityAgent": [
+      "ceo",
+      "researchAgent",
+      "adCopyAgent"
+    ],
+    "adCopyAgent": [
+      "searchVisibilityAgent",
+      "imageCreatorAgent"
+    ],
+    "imageCreatorAgent": [
+      "facebookPolicyAgent"
+    ],
+    "facebookPolicyAgent": [
+      "ceo",
+      "clientApprovalAgent"
+    ],
+    "clientApprovalAgent": [
+      "ceo",
+      "facebookManagerAgent"
+    ],
+    "facebookManagerAgent": [
+      "ceo",
+      "campaignOpsAgent"
+    ],
+    "campaignOpsAgent": [
+      "ceo"
+    ]
+  },
+  "inbound": {
+    "researchAgent": [
+      "ceo",
+      "searchVisibilityAgent"
+    ],
+    "ceo": [
+      "researchAgent",
+      "searchVisibilityAgent",
+      "facebookPolicyAgent",
+      "clientApprovalAgent",
+      "facebookManagerAgent",
+      "campaignOpsAgent"
+    ],
+    "searchVisibilityAgent": [
+      "ceo",
+      "researchAgent",
+      "adCopyAgent"
+    ],
+    "adCopyAgent": [
+      "ceo",
+      "searchVisibilityAgent"
+    ],
+    "imageCreatorAgent": [
+      "ceo",
+      "adCopyAgent"
+    ],
+    "facebookPolicyAgent": [
+      "ceo",
+      "imageCreatorAgent"
+    ],
+    "clientApprovalAgent": [
+      "ceo",
+      "facebookPolicyAgent"
+    ],
+    "campaignOpsAgent": [
+      "ceo",
+      "facebookManagerAgent"
+    ],
+    "facebookManagerAgent": [
+      "clientApprovalAgent"
+    ]
+  },
+  "bidirectional": [
+    [
+      "ceo",
+      "researchAgent"
+    ],
+    [
+      "campaignOpsAgent",
+      "ceo"
+    ],
+    [
+      "researchAgent",
+      "searchVisibilityAgent"
+    ],
+    [
+      "ceo",
+      "clientApprovalAgent"
+    ],
+    [
+      "ceo",
+      "searchVisibilityAgent"
+    ],
+    [
+      "ceo",
+      "facebookPolicyAgent"
+    ],
+    [
+      "adCopyAgent",
+      "searchVisibilityAgent"
+    ]
+  ],
+  "agent_map": {
+    "ceo": "MetaMarkCEO (Chief Growth Strategist)",
+    "researchAgent": "ResearchAgent (Market Intelligence Director)",
+    "searchVisibilityAgent": "SearchVisibilityAgent (Search & Answer Visibility Director)",
+    "adCopyAgent": "AdCopyAgent (Senior Conversion Copywriter)",
+    "imageCreatorAgent": "ImageCreatorAgent (Creative Director)",
+    "facebookPolicyAgent": "FacebookPolicyAgent (Facebook Policy Compliance Officer)",
+    "clientApprovalAgent": "ClientApprovalAgent (Client Approval Manager)",
+    "facebookManagerAgent": "FacebookManagerAgent (Media Operations Director)",
+    "campaignOpsAgent": "CampaignOpsAgent (Campaign Operations Director)"
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "MetaMarkCEO": {
+    "name": "Chief Growth Strategist",
+    "tool_count": 0,
+    "tools": [],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Approval management",
+      "Publishing/execution",
+      "Campaign operations",
+      "SEO strategy"
+    ],
+    "dependencies": [
+      "Media Operations Director",
+      "Creative Director",
+      "Client Approval Manager",
+      "Campaign Operations Director",
+      "Search & Answer Visibility Director",
+      "Market Intelligence Director",
+      "Facebook Policy Compliance Officer",
+      "Senior Conversion Copywriter"
+    ],
+    "independence_score": 8,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (18 'do not' statements)",
+      "Explicit handoff protocol",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "ResearchAgent": {
+    "name": "Market Intelligence Director",
+    "tool_count": 9,
+    "tools": [
+      "ScrapeCreatorsFacebookAdTranscript",
+      "ScrapeCreatorsFacebookAdDetails",
+      "CompetitorResearchPlanBuilder",
+      "ScrapeCreatorsFacebookCompanyAds",
+      "ScrapeCreatorsFacebookAdSearch",
+      "MetaAdLibraryPageSearch",
+      "MetaAdLibraryKeywordSearch",
+      "AdLibraryPatternAnalyzer",
+      "ScrapeCreatorsFacebookCompanySearch"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Publishing/execution",
+      "Campaign operations",
+      "SEO strategy"
+    ],
+    "dependencies": [
+      "Chief Growth Strategist",
+      "Search & Answer Visibility Director"
+    ],
+    "independence_score": 9,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (8 'do not' statements)",
+      "Self-sufficient tools (9)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "SearchVisibilityAgent": {
+    "name": "Search & Answer Visibility Director",
+    "tool_count": 3,
+    "tools": [
+      "SearchVisibilityBriefBuilder",
+      "KnowledgeDocumentLookup",
+      "ContentVisibilityChecklist"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Publishing/execution",
+      "Campaign operations",
+      "SEO strategy"
+    ],
+    "dependencies": [
+      "Creative Director",
+      "Chief Growth Strategist",
+      "Market Intelligence Director",
+      "Senior Conversion Copywriter"
+    ],
+    "independence_score": 10,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (10 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (3)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "AdCopyAgent": {
+    "name": "Senior Conversion Copywriter",
+    "tool_count": 1,
+    "tools": [
+      "AdCopyGenerator"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Publishing/execution",
+      "Campaign operations",
+      "SEO strategy"
+    ],
+    "dependencies": [
+      "Creative Director",
+      "Chief Growth Strategist",
+      "Search & Answer Visibility Director"
+    ],
+    "independence_score": 9,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (8 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (1)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "ImageCreatorAgent": {
+    "name": "Creative Director",
+    "tool_count": 2,
+    "tools": [
+      "ImageGenerator",
+      "ImageSelector"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Publishing/execution",
+      "Campaign operations"
+    ],
+    "dependencies": [
+      "Chief Growth Strategist",
+      "Facebook Policy Compliance Officer"
+    ],
+    "independence_score": 10,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (8 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (2)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "FacebookPolicyAgent": {
+    "name": "Facebook Policy Compliance Officer",
+    "tool_count": 1,
+    "tools": [
+      "FacebookPolicyChecklist"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Approval management",
+      "Publishing/execution",
+      "Campaign operations",
+      "SEO strategy"
+    ],
+    "dependencies": [
+      "Media Operations Director",
+      "Creative Director",
+      "Chief Growth Strategist",
+      "Client Approval Manager"
+    ],
+    "independence_score": 9,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (8 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (1)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "ClientApprovalAgent": {
+    "name": "Client Approval Manager",
+    "tool_count": 1,
+    "tools": [
+      "ClientApprovalChecklist"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Approval management",
+      "Publishing/execution",
+      "Campaign operations"
+    ],
+    "dependencies": [
+      "Media Operations Director",
+      "Chief Growth Strategist",
+      "Facebook Policy Compliance Officer"
+    ],
+    "independence_score": 9,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (5 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (1)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "FacebookManagerAgent": {
+    "name": "Media Operations Director",
+    "tool_count": 8,
+    "tools": [
+      "AdCampaignStarter",
+      "FacebookPhotoPostPublisher",
+      "AdCreator",
+      "FacebookPagePostPublisher",
+      "AdPerformanceMonitor",
+      "AdSetCreator",
+      "FacebookTokenDiagnostics",
+      "CampaignLifecycle"
+    ],
+    "capabilities": [
+      "Market research",
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Approval management",
+      "Publishing/execution",
+      "Campaign operations"
+    ],
+    "dependencies": [
+      "Chief Growth Strategist",
+      "Facebook Policy Compliance Officer",
+      "Campaign Operations Director",
+      "Client Approval Manager"
+    ],
+    "independence_score": 10,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (10 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (8)",
+      "Finish-before-handoff protocol"
+    ]
+  },
+  "CampaignOpsAgent": {
+    "name": "Campaign Operations Director",
+    "tool_count": 4,
+    "tools": [
+      "PostTracker",
+      "CampaignDashboard",
+      "BudgetManager",
+      "CampaignScheduler"
+    ],
+    "capabilities": [
+      "Content writing",
+      "Image generation",
+      "Policy compliance",
+      "Publishing/execution",
+      "Campaign operations",
+      "SEO strategy"
+    ],
+    "dependencies": [
+      "Chief Growth Strategist"
+    ],
+    "independence_score": 10,
+    "indicators": [
+      "Clear lane ownership",
+      "Strong boundaries (6 'do not' statements)",
+      "Explicit handoff protocol",
+      "Self-sufficient tools (4)",
+      "Finish-before-handoff protocol"
+    ]
+  }
+}
