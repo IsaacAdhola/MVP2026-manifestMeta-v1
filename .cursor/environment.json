@@ -1,0 +1,5 @@
+{
+  "name": "Manifest AI (ManifestMeta)",
+  "install": "pip install -r requirements.txt fastapi 'uvicorn[standard]' websockets gradio pytest",
+  "ports": [7860, 8000]
+}
