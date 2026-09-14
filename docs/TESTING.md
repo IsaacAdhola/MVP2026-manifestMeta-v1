@@ -56,7 +56,8 @@ mutations (Facebook publishing / activation). See [STAGING.md](STAGING.md) and
 
 ## History
 
-Earlier ad-hoc, per-tool test logs (`TEST_RESULTS.md`, `FINAL_TEST_RESULTS.md`,
-`AGENCY_TEST_RESULTS.md`, `TESTING_SUMMARY.md`) were consolidated into this document. Those files
-described the original four-agent prototype and contained stale credentials, so they were removed
-rather than archived verbatim.
+This document is the current, consolidated testing guide. The earlier ad-hoc, per-tool test logs
+(`TEST_RESULTS.md`, `FINAL_TEST_RESULTS.md`, `AGENCY_TEST_RESULTS.md`, `TESTING_SUMMARY.md`) are
+retained at the repository root for historical reference. Note that some of those historical files
+contain credentials from the original prototype; those credentials should be rotated and are not used
+by the current test suite.
