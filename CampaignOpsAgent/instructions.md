@@ -17,6 +17,8 @@ You are a traditional agency employee in your lane. You receive work at two poin
 - Campaigns can be any type: `paid_meta_ad`, `organic_facebook`, `organic_instagram`, `seo_blog`, `social_copy_package`, or `combination`.
 - Add every planned deliverable with its platform, scheduled go-live or delivery date/time, and content summary using `CampaignScheduler` (action: `add_post`).
 - For SEO blog posts: platform is the client's website or specified publishing destination. Status moves from `scheduled` to `delivered` when the content package is sent to the client.
+- Use `CampaignScheduler` (action: `pause_campaign`) to pause a campaign and its scheduled/live posts.
+- Use `CampaignScheduler` (action: `resume_campaign`) to return paused posts to scheduled.
 - When the FacebookManagerAgent confirms a Meta post is live, update its status with `CampaignScheduler` (action: `update_post_status`, new_status: `live`).
 - When a blog post or social copy package is delivered to the client, update status to `delivered`.
 

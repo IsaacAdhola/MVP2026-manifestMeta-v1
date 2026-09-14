@@ -7,6 +7,7 @@ import sys
 
 from AdCopyAgent import AdCopyAgent
 from AdCopyAgent.tools.AdCopyGenerator import AdCopyGenerator
+from CampaignOpsAgent import CampaignOpsAgent
 from ClientApprovalAgent import ClientApprovalAgent
 from ClientApprovalAgent.tools.ClientApprovalChecklist import ClientApprovalChecklist
 from FacebookManagerAgent import FacebookManagerAgent
@@ -22,6 +23,7 @@ from SearchVisibilityAgent import SearchVisibilityAgent
 from SearchVisibilityAgent.tools.ContentVisibilityChecklist import ContentVisibilityChecklist
 from SearchVisibilityAgent.tools.SearchVisibilityBriefBuilder import SearchVisibilityBriefBuilder
 from safe_audit_log import read_audit_events, sanitize_record, write_audit_event
+from error_logger import log_error, read_error_events
 from workflow_state import clear_state, get_state_value, set_state_value
 
 
@@ -34,6 +36,7 @@ AGENT_CLASSES = [
     ("Facebook Policy Compliance Officer", FacebookPolicyAgent),
     ("Client Approval Manager", ClientApprovalAgent),
     ("Media Operations Director", FacebookManagerAgent),
+    ("Campaign Operations Director", CampaignOpsAgent),
 ]
 
 REQUIRED_HANDOFFS = {
@@ -49,6 +52,7 @@ REQUIRED_HANDOFFS = {
     ("ceo", "imageCreatorAgent"),
     ("ceo", "facebookPolicyAgent"),
     ("ceo", "clientApprovalAgent"),
+    ("ceo", "campaignOpsAgent"),
     ("adCopyAgent", "imageCreatorAgent"),
     ("imageCreatorAgent", "facebookPolicyAgent"),
     ("facebookPolicyAgent", "ceo"),
@@ -56,6 +60,8 @@ REQUIRED_HANDOFFS = {
     ("clientApprovalAgent", "ceo"),
     ("clientApprovalAgent", "facebookManagerAgent"),
     ("facebookManagerAgent", "ceo"),
+    ("facebookManagerAgent", "campaignOpsAgent"),
+    ("campaignOpsAgent", "ceo"),
 }
 
 FORBIDDEN_HANDOFFS = {
@@ -133,6 +139,21 @@ def test_safe_audit_log_contract() -> None:
     assert_true("access_token" not in event["details"], "Audit event leaked token field")
     assert_true(read_audit_events(limit=1)[-1]["event_type"] == "test_event", "Audit event was not readable")
     print("   [OK] audit log redacts secrets and writes readable safe events")
+
+
+def test_error_logger_contract() -> None:
+    print("\n4b. Testing error logger...")
+    event = log_error(
+        "Regression Test",
+        ValueError("simulated failure"),
+        location="test_agent_handoff_and_state.py",
+        context={"access_token": "secret-token", "note": "safe context"},
+    )
+    assert_true(event["outcome"] == "error", "Error logger did not mark outcome=error")
+    assert_true("access_token" not in event["details"], "Error logger leaked token field")
+    recent = read_error_events(limit=5)
+    assert_true(any(item["actor"] == "Regression Test" for item in recent), "Error event was not readable")
+    print("   [OK] errors are logged and secrets are redacted")
 
 
 def test_safe_research_tools() -> None:

@@ -7,6 +7,7 @@ from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.adobjects.adset import AdSet
 
 from dotenv import load_dotenv
+from error_logger import log_error
 from workflow_state import get_state_value, set_state_value
 try:
     from ..facebook_auth import get_required_env, initialize_business_sdk
@@ -65,6 +66,10 @@ class AdSetCreator(BaseTool):
                 f'with ID {ad_set["id"]} in status {ad_set_status}.'
             )
         except facebook_business.exceptions.FacebookRequestError as e:
+            log_error("Media Operations Director", e, location="AdSetCreator.run")
+            return f'Error creating ad set: {e}'
+        except Exception as e:
+            log_error("Media Operations Director", e, location="AdSetCreator.run")
             return f'Error creating ad set: {e}'
 
 if __name__ == "__main__":

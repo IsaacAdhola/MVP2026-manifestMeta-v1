@@ -6,6 +6,7 @@ from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.adobjects.campaign import Campaign
 
 from dotenv import load_dotenv
+from error_logger import log_error
 from workflow_state import set_state_value
 try:
     from ..facebook_auth import get_required_env, initialize_business_sdk
@@ -56,6 +57,15 @@ class AdCampaignStarter(BaseTool):
                 f'with ID {campaign["id"]} in status {campaign_status}.'
             )
         except facebook_business.exceptions.FacebookRequestError as e:
+            log_error(
+                "Media Operations Director",
+                e,
+                location="AdCampaignStarter.run",
+                context={"api_error_code": getattr(e, "api_error_code", lambda: None)()},
+            )
+            return f'Error starting ad campaign: {e}'
+        except Exception as e:
+            log_error("Media Operations Director", e, location="AdCampaignStarter.run")
             return f'Error starting ad campaign: {e}'
 
 if __name__ == "__main__":

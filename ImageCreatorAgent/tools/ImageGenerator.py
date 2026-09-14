@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 from urllib.request import urlopen
+from error_logger import log_error
 from workflow_state import set_state_value, get_state_value
 
 from dotenv import load_dotenv
@@ -98,6 +99,7 @@ class ImageGenerator(BaseTool):
                 "error": str(exc)[:300],
             })
             # #endregion
+            log_error("Creative Director", exc, location="ImageGenerator._generate_single")
             raise
         image_data = response.data[0]
         has_b64 = bool(getattr(image_data, "b64_json", None))

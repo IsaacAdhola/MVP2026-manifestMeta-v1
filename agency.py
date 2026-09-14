@@ -114,6 +114,8 @@ def _demo_gradio(server_name="127.0.0.1", server_port=7860, share=False, allowed
             # #endregion
             return output
         except Exception as exc:
+            from error_logger import log_error
+            log_error("Chief Growth Strategist", exc, location="agency.py:_chat")
             return f"[Error] {exc}"
 
     _default_allowed = allowed_paths or [
@@ -175,6 +177,15 @@ def _demo_gradio(server_name="127.0.0.1", server_port=7860, share=False, allowed
     )
 
 agency.demo_gradio = _demo_gradio
+
+
+def build_independent_agency(agent):
+    """Run one specialist without team routing. The CEO remains the team communicator."""
+    return Agency(
+        agent,
+        communication_flows=[],
+        shared_instructions="./agency_manifesto.md",
+    )
 
 
 def _configure_console_encoding() -> None:

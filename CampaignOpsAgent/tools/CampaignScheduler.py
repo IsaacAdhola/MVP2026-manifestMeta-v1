@@ -31,12 +31,17 @@ class CampaignScheduler(BaseTool):
     action: str = Field(
         ...,
         description=(
-            "What to do: 'create_campaign', 'add_post', 'update_post_status', 'list_campaigns', 'list_posts'."
+            "What to do: 'create_campaign', 'add_post', 'update_post_status', "
+            "'list_campaigns', 'list_posts', 'pause_campaign', 'resume_campaign'."
         ),
     )
     campaign_name: Optional[str] = Field(None, description="Name of the campaign.")
-    campaign_id: Optional[str] = Field(None, description="Existing campaign ID (for add_post / list_posts).")
+    campaign_id: Optional[str] = Field(None, description="Existing campaign ID (for add_post / list_posts / pause).")
     client_name: Optional[str] = Field(None, description="Client the campaign belongs to.")
+    campaign_type: Optional[str] = Field(
+        None,
+        description="paid_meta_ad, organic_facebook, seo_blog, social_copy_package, or combination.",
+    )
     platform: Optional[str] = Field(None, description="Platform for the post: Facebook, Instagram, etc.")
     scheduled_time: Optional[str] = Field(
         None,
@@ -59,6 +64,8 @@ class CampaignScheduler(BaseTool):
                 "id": str(uuid4()),
                 "name": self.campaign_name or "Unnamed Campaign",
                 "client": self.client_name or "Unknown Client",
+                "campaign_type": self.campaign_type or "combination",
+                "status": "scheduled",
                 "created_at": datetime.now(timezone.utc).isoformat(),
                 "posts": [],
             }
@@ -72,9 +79,12 @@ class CampaignScheduler(BaseTool):
                     "id": c["id"],
                     "name": c["name"],
                     "client": c["client"],
+                    "status": c.get("status", "scheduled"),
+                    "campaign_type": c.get("campaign_type", "combination"),
                     "total_posts": len(c["posts"]),
                     "live_posts": sum(1 for p in c["posts"] if p["status"] == "live"),
                     "scheduled_posts": sum(1 for p in c["posts"] if p["status"] == "scheduled"),
+                    "paused_posts": sum(1 for p in c["posts"] if p["status"] == "paused"),
                 }
                 for c in data["campaigns"]
             ]
@@ -112,6 +122,38 @@ class CampaignScheduler(BaseTool):
                 post["ad_set_id"] = self.ad_set_id
             _save(data)
             return json.dumps({"status": "updated", "post": post})
+
+        if self.action == "pause_campaign":
+            campaign["status"] = "paused"
+            paused_posts = 0
+            for post in campaign["posts"]:
+                if post.get("status") in ("scheduled", "live"):
+                    post["status"] = "paused"
+                    paused_posts += 1
+            _save(data)
+            return json.dumps(
+                {
+                    "status": "paused",
+                    "campaign_id": campaign["id"],
+                    "posts_paused": paused_posts,
+                }
+            )
+
+        if self.action == "resume_campaign":
+            campaign["status"] = "scheduled"
+            resumed_posts = 0
+            for post in campaign["posts"]:
+                if post.get("status") == "paused":
+                    post["status"] = "scheduled"
+                    resumed_posts += 1
+            _save(data)
+            return json.dumps(
+                {
+                    "status": "resumed",
+                    "campaign_id": campaign["id"],
+                    "posts_resumed": resumed_posts,
+                }
+            )
 
         if self.action == "list_posts":
             return json.dumps({"campaign": campaign["name"], "posts": campaign["posts"]})

@@ -9,6 +9,7 @@ from facebook_business.exceptions import FacebookRequestError
 from pydantic import Field
 
 from dotenv import load_dotenv
+from error_logger import log_error
 from workflow_state import get_state_value, set_state_value
 try:
     from ..facebook_auth import get_required_env, initialize_business_sdk
@@ -89,11 +90,23 @@ class AdCreator(BaseTool):
 
             return f"Ad created successfully with ID: {ad['id']}"
         except FacebookRequestError as e:
+            log_error(
+                "Media Operations Director",
+                e,
+                location="AdCreator.run",
+                context={
+                    "api_error_code": e.api_error_code(),
+                    "api_error_subcode": e.api_error_subcode(),
+                },
+            )
             return (
                 f"Error creating ad: {e.api_error_message()} "
                 f"(code={e.api_error_code()}, subcode={e.api_error_subcode()}, "
                 f"type={e.api_error_type()})"
             )
+        except Exception as e:
+            log_error("Media Operations Director", e, location="AdCreator.run")
+            return f"Error creating ad: {e}"
 
 if __name__ == "__main__":
     import os

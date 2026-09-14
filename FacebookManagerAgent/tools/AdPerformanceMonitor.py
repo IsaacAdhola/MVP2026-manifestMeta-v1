@@ -9,6 +9,7 @@ from facebook_business.adobjects.ad import Ad
 from facebook_business.exceptions import FacebookRequestError
 
 from dotenv import load_dotenv
+from error_logger import log_error
 
 try:
     from ..facebook_auth import initialize_business_sdk
@@ -45,10 +46,22 @@ class AdPerformanceMonitor(BaseTool):
             records = [dict(row) for row in insights] if insights else []
             return json.dumps({"ad_id": self.ad_id, "insights": records}, ensure_ascii=False)
         except FacebookRequestError as e:
+            log_error(
+                "Media Operations Director",
+                e,
+                location="AdPerformanceMonitor.run",
+                context={
+                    "api_error_code": e.api_error_code(),
+                    "api_error_subcode": e.api_error_subcode(),
+                },
+            )
             return (
                 f"Error accessing ad performance metrics: {e.api_error_message()} "
                 f"(code={e.api_error_code()}, subcode={e.api_error_subcode()})"
             )
+        except Exception as e:
+            log_error("Media Operations Director", e, location="AdPerformanceMonitor.run")
+            return f"Error accessing ad performance metrics: {e}"
 
 
 if __name__ == "__main__":
