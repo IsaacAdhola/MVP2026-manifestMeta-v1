@@ -8,6 +8,7 @@ from facebook_business.adobjects.adset import AdSet
 
 from dotenv import load_dotenv
 from workflow_state import get_state_value, set_state_value
+from config import live_mutations_allowed, staging_block_notice
 try:
     from ..lib.facebook_auth import get_required_env, initialize_business_sdk
 except ImportError:
@@ -33,6 +34,8 @@ class AdSetCreator(BaseTool):
     )
 
     def run(self):
+        if not live_mutations_allowed():
+            return staging_block_notice("AdSetCreator")
         try:
             initialize_business_sdk()
             ad_account_id = get_required_env("FACEBOOK_AD_ACCOUNT_ID")

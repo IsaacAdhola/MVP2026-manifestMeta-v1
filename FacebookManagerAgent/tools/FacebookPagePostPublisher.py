@@ -13,6 +13,7 @@ if _WORKSPACE_DIR not in sys.path:
     sys.path.insert(0, _WORKSPACE_DIR)
 
 from workflow_state import set_state_value
+from config import live_mutations_allowed, staging_block_notice
 
 try:
     from ..lib.facebook_auth import (
@@ -45,6 +46,8 @@ class FacebookPagePostPublisher(BaseTool):
     )
 
     def run(self):
+        if not live_mutations_allowed():
+            return staging_block_notice("FacebookPagePostPublisher")
         page_id = get_required_env("FACEBOOK_PAGE_ID")
         env = initialize_business_sdk()
         base_token = env["access_token"]
