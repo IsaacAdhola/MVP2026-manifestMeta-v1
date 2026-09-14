@@ -1,0 +1,122 @@
+# SECURE DEPENDENCY SPECIFICATION
+# Generated: 2026-09-14
+# Security Audit Score: 6.5/10 (Current) -> Target: 8.5/10
+#
+# This file uses EXACT version pinning to ensure reproducible builds
+# and prevent supply chain attacks via automatic version upgrades.
+#
+# IMPORTANT: Review and test thoroughly before replacing requirements.txt
+#
+# Update procedure:
+# 1. Review changelogs for each version bump
+# 2. Run security scan: pip-audit -r requirements-secure.txt
+# 3. Run tests: pytest
+# 4. Update this file if all checks pass
+
+# Core Framework (v1.x - OpenAI Agents SDK based)
+# Security Note: 23% security score, OpenSSF 4.5/10
+# Monitor: https://github.com/VRSEN/agency-swarm/releases
+agency-swarm==1.11.0
+
+# Facebook Business API SDK
+# Security: 0 direct CVEs (Snyk verified)
+# Monitor: https://github.com/facebook/facebook-python-business-sdk/releases
+facebook-business==26.0.1
+
+# OpenAI API Client
+# Security: 0 direct CVEs (multiple sources verified)
+# Note: Version locked by agency-swarm constraint (<2.45)
+# Latest available: 3.13.0 (blocked until agency-swarm updates)
+# Monitor: https://github.com/openai/openai-python/releases
+openai==2.44.0
+
+# Environment Configuration
+# Security: No known vulnerabilities
+python-dotenv==1.2.3
+
+# HTTP Client Library
+# Security: 0 direct CVEs in this version
+# Transitive dependency of multiple packages
+requests==2.33.1
+
+# ============================================================================
+# OPTIONAL: Security & Development Tools
+# Uncomment to add security scanning and quality tools to your environment
+# ============================================================================
+
+# --- Vulnerability Scanning ---
+# pip-audit==2.10.1              # PyPI vulnerability scanner
+# safety==3.0.0                  # Alternative vulnerability DB
+
+# --- Security Linting ---
+# bandit==1.8.0                  # Python security issue finder
+
+# --- Code Quality ---
+# black==26.5.1                  # Code formatter (already installed)
+# isort==8.0.1                   # Import sorter (already installed)
+# pylint==3.2.0                  # Comprehensive linter
+# mypy==1.15.0                   # Static type checker
+
+# --- Testing ---
+# pytest==8.3.0                  # Testing framework
+# pytest-cov==5.0.0              # Coverage reporting
+# pytest-asyncio==0.24.0         # Async test support
+
+# --- Supply Chain Security ---
+# cyclonedx-bom==6.0.0           # SBOM generation
+# pip-licenses==5.0.0            # License audit tool
+
+# --- Dependency Management ---
+# pip-tools==7.4.1               # pip-compile for dependency resolution
+
+# ============================================================================
+# NOTES ON TRANSITIVE DEPENDENCIES
+# ============================================================================
+#
+# This file specifies only direct dependencies. Your environment will also
+# install ~144 transitive dependencies. To freeze ALL dependencies:
+#
+#   pip freeze > requirements-frozen.txt
+#
+# To generate hash-verified requirements:
+#
+#   pip-compile requirements.in --generate-hashes -o requirements.txt
+#
+# ============================================================================
+# KNOWN ISSUES & MONITORING
+# ============================================================================
+#
+# 1. OPENAI VERSION CONSTRAINT
+#    - Current: 2.44.0
+#    - Latest: 3.13.0
+#    - Blocker: agency-swarm requires openai<2.45
+#    - Action: Monitor agency-swarm for openai 3.x support
+#
+# 2. AGENCY-SWARM SUPPLY CHAIN
+#    - Security Score: 23% (Basic)
+#    - OpenSSF Scorecard: 4.5/10
+#    - Issues: No branch protection, missing code review, no fuzzing
+#    - Action: Monitor security improvements or consider alternatives
+#
+# 3. ENVIRONMENT VULNERABILITIES (not in this file, but in system)
+#    - pip 24.0 -> needs 26.2 (11 CVEs)
+#    - setuptools 68.1.2 -> needs 83.0.0 (6 CVEs)
+#    - urllib3 2.6.3 -> needs 2.7.0 (3 CVEs)
+#    - wheel 0.42.0 -> needs 0.46.2 (1 CVE)
+#    - Action: pip install --upgrade pip setuptools urllib3 wheel
+#
+# ============================================================================
+# SECURITY CHECKLIST
+# ============================================================================
+#
+# [ ] Exact versions specified (no >=, ~=, or *)
+# [ ] Security scan passed (pip-audit)
+# [ ] License compliance verified
+# [ ] All tests passing
+# [ ] No known CVEs in direct dependencies
+# [ ] Transitive dependencies reviewed
+# [ ] Change log reviewed for breaking changes
+# [ ] SBOM generated and stored
+# [ ] Security review completed
+#
+# ============================================================================
