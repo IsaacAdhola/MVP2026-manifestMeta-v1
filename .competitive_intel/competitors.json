@@ -1,0 +1,98 @@
+{
+  "jasper": {
+    "name": "Jasper AI",
+    "url": "https://www.jasper.ai",
+    "focus": "Enterprise content creation",
+    "target": "Large enterprises, marketing teams",
+    "pricing_model": "seat-based",
+    "estimated_price_range": "$39-$125/user/month",
+    "features": [
+      {
+        "name": "Brand Voice",
+        "category": "ai_models",
+        "description": "Learns and mimics brand voice",
+        "announced_date": "2026-09-16T13:50:17.974886+00:00",
+        "recorded_at": "2026-09-16T13:50:17.974888+00:00"
+      },
+      {
+        "name": "SEO Mode",
+        "category": "platform",
+        "description": "SEO-optimized content generation",
+        "announced_date": "2026-09-16T13:50:17.975095+00:00",
+        "recorded_at": "2026-09-16T13:50:17.975097+00:00"
+      }
+    ],
+    "pricing_history": [],
+    "last_updated": "2026-09-16T13:50:17.975099+00:00"
+  },
+  "copyai": {
+    "name": "Copy.ai",
+    "url": "https://www.copy.ai",
+    "focus": "Sales and marketing copy",
+    "target": "SMBs, solopreneurs",
+    "pricing_model": "seat-based",
+    "estimated_price_range": "$36-$186/user/month",
+    "features": [
+      {
+        "name": "Sales Workflow",
+        "category": "automation",
+        "description": "Automated sales email sequences",
+        "announced_date": "2026-09-16T13:50:17.975258+00:00",
+        "recorded_at": "2026-09-16T13:50:17.975259+00:00"
+      },
+      {
+        "name": "Chat Interface",
+        "category": "platform",
+        "description": "Conversational AI interface",
+        "announced_date": "2026-09-16T13:50:17.975888+00:00",
+        "recorded_at": "2026-09-16T13:50:17.975889+00:00"
+      }
+    ],
+    "pricing_history": [],
+    "last_updated": "2026-09-16T13:50:17.975891+00:00"
+  },
+  "juma": {
+    "name": "Juma AI",
+    "url": "https://juma.ai",
+    "focus": "AI marketing automation",
+    "target": "Mid-market businesses",
+    "pricing_model": "usage-based",
+    "estimated_price_range": "Custom pricing",
+    "features": [],
+    "pricing_history": [],
+    "last_updated": "2026-09-16T13:50:17.974867+00:00"
+  },
+  "yodai": {
+    "name": "YodAI",
+    "url": "https://yod.ai",
+    "focus": "Multi-channel marketing",
+    "target": "SMBs",
+    "pricing_model": "tiered",
+    "estimated_price_range": "$99-$499/month",
+    "features": [],
+    "pricing_history": [],
+    "last_updated": "2026-09-16T13:50:17.974869+00:00"
+  },
+  "markifact": {
+    "name": "Markifact",
+    "url": "https://markifact.com",
+    "focus": "Marketing artifact generation",
+    "target": "Agencies, consultants",
+    "pricing_model": "project-based",
+    "estimated_price_range": "$500-$2000/project",
+    "features": [],
+    "pricing_history": [],
+    "last_updated": "2026-09-16T13:50:17.974870+00:00"
+  },
+  "superscale": {
+    "name": "Superscale",
+    "url": "https://superscale.com",
+    "focus": "Growth marketing automation",
+    "target": "Startups, growth teams",
+    "pricing_model": "usage-based",
+    "estimated_price_range": "$299-$999/month",
+    "features": [],
+    "pricing_history": [],
+    "last_updated": "2026-09-16T13:50:17.974872+00:00"
+  }
+}

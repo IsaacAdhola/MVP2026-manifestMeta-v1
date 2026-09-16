@@ -1,0 +1,33 @@
+{
+  "records": [
+    {
+      "record_id": "a476c23a-05de-4b48-a78e-7650a969a960",
+      "key": "draft_count",
+      "value": 5,
+      "scope": "agent_private",
+      "workflow_id": "camp_123",
+      "agent_id": "copywriter",
+      "created_by": "system",
+      "source": "manual",
+      "confidence": 1.0,
+      "created_at": "2026-09-16T13:47:18.346426+00:00",
+      "supersedes": null,
+      "valid_until": null
+    },
+    {
+      "record_id": "b19e122c-85a4-4726-b0b9-79355e9f75d2",
+      "key": "draft_count",
+      "value": 5,
+      "scope": "agent_private",
+      "workflow_id": "camp_123",
+      "agent_id": "copywriter",
+      "created_by": "system",
+      "source": "manual",
+      "confidence": 1.0,
+      "created_at": "2026-09-16T13:47:32.805666+00:00",
+      "supersedes": null,
+      "valid_until": null
+    }
+  ],
+  "last_updated": "2026-09-16T13:47:32.805670+00:00"
+}
