@@ -7,11 +7,11 @@
       "total_spent": 41250.0,
       "spend_log": [
         {
-          "campaign_id": "b7272d8c-f533-4c6c-b8ea-cf1bd34b0ad1",
-          "post_id": "1adabc11-61b6-4411-b434-f0ccf8dc1dbf",
+          "campaign_id": "3a3c1f46-17cb-4d33-ac2d-686ce9d6e46d",
+          "post_id": "fb4627b8-f498-4f79-a06b-3f6aacc02ec8",
           "amount": 1250.0,
           "currency": "USD",
-          "recorded_at": "2026-06-22T17:44:36.740648+00:00",
+          "recorded_at": "2026-09-14T22:57:12.066517+00:00",
           "notes": null
         },
         {
@@ -19,11 +19,11 @@
           "post_id": null,
           "amount": 40000.0,
           "currency": "USD",
-          "recorded_at": "2026-06-22T17:44:36.764415+00:00",
+          "recorded_at": "2026-09-14T22:57:12.066814+00:00",
           "notes": null
         }
       ],
-      "set_at": "2026-06-22T17:44:36.728741+00:00",
+      "set_at": "2026-09-14T22:57:12.066324+00:00",
       "notes": null
     }
   }

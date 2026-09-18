@@ -1,0 +1,89 @@
+{
+  "records": [
+    {
+      "record_id": "8add1039-4606-4b07-a428-134aca4ede32",
+      "key": "meeting_time",
+      "value": "2 PM",
+      "scope": "workflow",
+      "workflow_id": "test",
+      "agent_id": null,
+      "created_by": "system",
+      "source": "manual",
+      "confidence": 1.0,
+      "created_at": "2026-09-16T13:47:18.346571+00:00",
+      "supersedes": null,
+      "valid_until": "2026-09-16T13:47:18.346702+00:00"
+    },
+    {
+      "record_id": "5727eec4-d6f4-4810-885a-2a1cd206cff6",
+      "key": "meeting_time",
+      "value": "3 PM",
+      "scope": "workflow",
+      "workflow_id": "test",
+      "agent_id": null,
+      "created_by": "system",
+      "source": "manual",
+      "confidence": 1.0,
+      "created_at": "2026-09-16T13:47:18.346707+00:00",
+      "supersedes": "8add1039-4606-4b07-a428-134aca4ede32",
+      "valid_until": "2026-09-16T13:47:32.806103+00:00"
+    },
+    {
+      "record_id": "2a94f596-c17e-47f1-bbf8-ac27b60ca450",
+      "key": "target_audience",
+      "value": "25-34 professionals",
+      "scope": "workflow",
+      "workflow_id": "test",
+      "agent_id": null,
+      "created_by": "ResearchAgent",
+      "source": "Meta Ad Library analysis",
+      "confidence": 0.92,
+      "created_at": "2026-09-16T13:47:18.346924+00:00",
+      "supersedes": null,
+      "valid_until": null
+    },
+    {
+      "record_id": "27c454c7-8733-4c43-bdfc-fa1fb64b740a",
+      "key": "meeting_time",
+      "value": "2 PM",
+      "scope": "workflow",
+      "workflow_id": "test",
+      "agent_id": null,
+      "created_by": "system",
+      "source": "manual",
+      "confidence": 1.0,
+      "created_at": "2026-09-16T13:47:32.805902+00:00",
+      "supersedes": null,
+      "valid_until": "2026-09-16T13:47:32.806105+00:00"
+    },
+    {
+      "record_id": "2f6d6be4-b9dd-4cfe-81da-ab6b5beac5a9",
+      "key": "meeting_time",
+      "value": "3 PM",
+      "scope": "workflow",
+      "workflow_id": "test",
+      "agent_id": null,
+      "created_by": "system",
+      "source": "manual",
+      "confidence": 1.0,
+      "created_at": "2026-09-16T13:47:32.806110+00:00",
+      "supersedes": "27c454c7-8733-4c43-bdfc-fa1fb64b740a",
+      "valid_until": null
+    },
+    {
+      "record_id": "4269bddd-dade-40b2-82c1-62f684f7e158",
+      "key": "target_audience",
+      "value": "25-34 professionals",
+      "scope": "workflow",
+      "workflow_id": "test",
+      "agent_id": null,
+      "created_by": "ResearchAgent",
+      "source": "Meta Ad Library analysis",
+      "confidence": 0.92,
+      "created_at": "2026-09-16T13:47:32.806908+00:00",
+      "supersedes": null,
+      "valid_until": null
+    }
+  ],
+  "last_updated": "2026-09-16T13:47:32.806915+00:00"
+}

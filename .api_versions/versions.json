@@ -1,0 +1,29 @@
+{
+  "openai_3.13.0_20260916": {
+    "package": "openai",
+    "current_version": "2.44.0",
+    "new_version": "3.13.0",
+    "status": "detected",
+    "detected_at": "2026-09-16T13:47:32.809052+00:00",
+    "test_results": [
+      {
+        "test_name": "unit_tests",
+        "passed": true,
+        "details": {
+          "tests_passed": 40
+        },
+        "tested_at": "2026-09-16T13:47:32.809175+00:00"
+      },
+      {
+        "test_name": "integration_tests",
+        "passed": true,
+        "details": {
+          "tests_passed": 15
+        },
+        "tested_at": "2026-09-16T13:47:32.809394+00:00"
+      }
+    ],
+    "cost_comparison": null,
+    "quality_comparison": null
+  }
+}

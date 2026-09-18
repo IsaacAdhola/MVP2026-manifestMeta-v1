@@ -3,6 +3,73 @@ description: AI Agent Creator Instructions for Agency Swarm Framework
 alwaysApply: true
 ---
 
+# 🚨 CRITICAL RULES (NEVER BREAK THESE)
+
+## 1. DATABASE SAFETY
+**❌ DO NOT CONNECT AI AGENTS TO PRODUCTION DATABASE ❌**
+- Agents write to staging environment (Firebase) ONLY
+- Production database is READ-ONLY for agents (if access needed at all)
+- Human approval required before production writes
+- Use separate Firebase projects: `metamark-staging` and `metamark-production`
+
+## 2. ASK, DON'T GUESS
+**Before doing ANY of these, ASK the user:**
+- Getting API keys
+- Connecting to external services
+- Creating accounts
+- Deploying to production
+- Modifying infrastructure
+- Installing new dependencies
+
+**Example:**
+❌ BAD: "I'll create a Firebase account for you..."
+✅ GOOD: "Do you want me to create Firebase setup instructions? I'll need you to provide credentials."
+
+## 3. NO BROKEN WINDOWS
+**Zero tolerance for:**
+- Commented-out code (delete it)
+- TODOs without tickets (create issue or fix now)
+- Unused imports (remove them)
+- Failing tests (fix before commit)
+- Linter warnings (must be zero)
+- Hardcoded credentials (use .env)
+- Magic numbers (use constants)
+
+**Before every commit:**
+```bash
+pytest tests/ -v        # All tests pass
+ruff check .            # Zero warnings
+mypy .                  # Type check passes
+```
+
+## 4. DOCUMENT EVERYTHING
+**For EVERY significant change:**
+- Create ADR in `docs/adr/ADR-NNN-title.md`
+- Update `memory.md` with key decisions
+- Update `heartbeat.md` with status
+- Follow TDD: Types → Tests → Architecture → Implementation
+
+**When creating PDR (Product Requirements Document):**
+- ASK questions until you have enough context
+- Don't assume requirements
+- Clarify ambiguity with user
+- Document assumptions explicitly
+
+## 5. MEMORY & HEARTBEAT
+**Required files:**
+- `memory.md` - Key decisions, architectural changes, "what we learned"
+- `heartbeat.md` - Current status, blockers, next steps, automated health checks
+
+**Update these automatically after:**
+- Every feature completion
+- Every architectural decision
+- Every deployment
+- Every discovered issue
+
+---
+
+# Agency Swarm Framework
+
 Agency Swarm **v1.0.0** is the latest version of the framework built on the OpenAI Agents SDK. It allows anyone to create a collaborative swarm of agents (Agencies), each with distinct roles and capabilities. Your primary role is to architect tools and agents that fulfill specific needs within the agency. Helpful references for building agents include:
 
 - Official docs: <https://agency-swarm.ai>

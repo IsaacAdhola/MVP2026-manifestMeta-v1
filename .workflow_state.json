@@ -1,1 +1,106 @@
-{}
+{
+  "image_path": "/workspace/FacebookManagerAgent/image.png",
+  "ad_set_id": "6867670805634",
+  "ad_copy": "Join the sustainable style revolution without breaking the bank. Look good, feel good!",
+  "ad_headline": "Eco-Friendly Fashion for Less!",
+  "campaign_id": "6867670459634",
+  "content_visibility_checklist": {
+    "outcome": "revise",
+    "score": 67,
+    "passed": 6,
+    "total": 9,
+    "content_type": "seo_blog",
+    "checks": [
+      {
+        "pillar": "seo",
+        "criterion": "primary_keyword_in_title",
+        "pass": false,
+        "note": "Primary keyword should appear naturally in the title when provided."
+      },
+      {
+        "pillar": "seo",
+        "criterion": "primary_keyword_in_body",
+        "pass": false,
+        "note": "Primary keyword should appear in the opening and body without stuffing."
+      },
+      {
+        "pillar": "seo",
+        "criterion": "structured_headers",
+        "pass": true,
+        "note": "Long-form drafts should use clear H2/H3 structure."
+      },
+      {
+        "pillar": "seo",
+        "criterion": "meta_description_present",
+        "pass": true,
+        "note": "Meta description ideally 140\u2013160 characters and keyword-aware."
+      },
+      {
+        "pillar": "seo",
+        "criterion": "secondary_keywords_present",
+        "pass": false,
+        "note": "Secondary keyword hits: 1/2."
+      },
+      {
+        "pillar": "aeo",
+        "criterion": "answer_ready_opening",
+        "pass": true,
+        "note": "Lead with a clear, direct answer when the query is question-shaped."
+      },
+      {
+        "pillar": "aeo",
+        "criterion": "faq_or_question_blocks",
+        "pass": true,
+        "note": "Include FAQ or explicit Q&A blocks for answer-engine capture."
+      },
+      {
+        "pillar": "geo",
+        "criterion": "structured_takeaways",
+        "pass": true,
+        "note": "Clear takeaways help generative engines cite and summarize accurately."
+      },
+      {
+        "pillar": "geo",
+        "criterion": "citation_safe_claims",
+        "pass": true,
+        "note": "Avoid unverifiable ranking guarantees that hurt trust and citability."
+      }
+    ],
+    "revision_guidance": "Return specific revision notes to the Senior Conversion Copywriter. Consult files/ PDFs via File Search for depth \u2014 this checklist is not a substitute.",
+    "knowledge_reminder": "Use Search_Engine_Optimization.pdf, answer_engine_optimization_holtschulte_202508.pdf, and GEO.pdf."
+  },
+  "search_visibility_brief": {
+    "role": "search_visibility_strategy_brief",
+    "business_or_category": "Med spa",
+    "topic_or_offer": "Botox for first-time patients",
+    "audience": "Women 30-55 in North Dallas",
+    "geography": "Plano, Frisco, Allen",
+    "campaign_goal": "booked consultations",
+    "seo": {
+      "primary_keyword": "first time botox what to expect",
+      "secondary_keywords": [
+        "botox consultation",
+        "botox recovery",
+        "med spa near me"
+      ],
+      "search_intent": "informational",
+      "content_format": "how-to with FAQ",
+      "on_page_notes": "Consult Search_Engine_Optimization.pdf for title/meta, header, and keyword placement standards before locking the brief."
+    },
+    "aeo": {
+      "answer_first_opening": true,
+      "faq_recommended": true,
+      "direct_answer_blocks": true,
+      "notes": "Consult answer_engine_optimization_holtschulte_202508.pdf for answer-engine patterns and citation-friendly structure."
+    },
+    "geo": {
+      "citation_friendly_claims": true,
+      "clear_entity_context": true,
+      "structured_takeaways": true,
+      "notes": "Consult GEO.pdf for generative-engine visibility tactics before finalizing GEO checklist items."
+    },
+    "market_insights": "",
+    "handoff": "Pass this finished strategy package to the Chief Growth Strategist or Senior Conversion Copywriter. Do not include private reasoning, tokens, or raw tool dumps.",
+    "knowledge_reminder": "Search files/ PDFs via File Search; do not invent contradicting rules."
+  }
+}
