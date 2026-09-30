@@ -32,7 +32,10 @@ class FacebookPhotoPostPublisher(BaseTool):
     Publishes a generated local image to the configured Facebook Page with a caption.
     """
 
-    message: str = Field(..., description="Caption text to publish with the image.")
+    message: str = Field(
+        default="",
+        description="Caption text to publish with the image. Uses selected copy from shared state when empty.",
+    )
     image_path: str | None = Field(
         default=None,
         description="Optional local image path. If omitted, uses the last generated image from workflow state.",
@@ -63,6 +66,9 @@ class FacebookPhotoPostPublisher(BaseTool):
                 return message
 
             resolved_image_path = self.image_path or get_state_value("image_path")
+            caption = (self.message or get_state_value("ad_copy") or "").strip()
+            if not caption:
+                raise ValueError("Caption not found. Generate copy first.")
             if not resolved_image_path:
                 raise ValueError("Image path not found. Please generate an image first.")
             resolved_image_path = self._resolve_image_path(resolved_image_path)
@@ -74,7 +80,7 @@ class FacebookPhotoPostPublisher(BaseTool):
                     f"https://graph.facebook.com/v25.0/{page_id}/photos",
                     data={
                         "access_token": page_token,
-                        "caption": self.message,
+                        "caption": caption,
                         "published": str(self.published).lower(),
                     },
                     files={"source": image_file},

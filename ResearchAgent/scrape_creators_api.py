@@ -29,9 +29,17 @@ def clean_params(params: dict[str, Any]) -> dict[str, Any]:
 
 
 def scrape_creators_get(path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+    try:
+        api_key = get_api_key()
+    except ValueError as exc:
+        from error_logger import log_error
+
+        log_error("Market Intelligence Director", exc, location="scrape_creators_get")
+        return {"ok": False, "error": str(exc)}
+
     response = requests.get(
         f"{BASE_URL}/{path.lstrip('/')}",
-        headers={"x-api-key": get_api_key()},
+        headers={"x-api-key": api_key},
         params=clean_params(params or {}),
         timeout=60,
     )
@@ -41,6 +49,14 @@ def scrape_creators_get(path: str, params: dict[str, Any] | None = None) -> dict
         data = {"error": {"message": response.text}}
 
     if response.status_code >= 400:
+        from error_logger import log_error
+
+        log_error(
+            "Market Intelligence Director",
+            str(data.get("error", data)),
+            location="scrape_creators_get",
+            context={"http_status": response.status_code},
+        )
         return {
             "ok": False,
             "http_status": response.status_code,

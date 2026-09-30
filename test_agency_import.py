@@ -17,6 +17,10 @@ try:
     from ClientApprovalAgent import ClientApprovalAgent
     from CampaignOpsAgent import CampaignOpsAgent
     from SearchVisibilityAgent import SearchVisibilityAgent
+    from PerformanceAnalystAgent import PerformanceAnalystAgent
+    from CommunityManagerAgent import CommunityManagerAgent
+    from ConversionPageAgent import ConversionPageAgent
+    from CulturalIntelligenceAgent import CulturalIntelligenceAgent
     from dotenv import load_dotenv
     print("   [OK] All imports successful")
     
@@ -51,35 +55,60 @@ try:
 
     searchVisibilityAgent = SearchVisibilityAgent()
     print("   [OK] SearchVisibilityAgent created")
+
+    performanceAnalystAgent = PerformanceAnalystAgent()
+    print("   [OK] PerformanceAnalystAgent created")
+
+    communityManagerAgent = CommunityManagerAgent()
+    print("   [OK] CommunityManagerAgent created")
+
+    conversionPageAgent = ConversionPageAgent()
+    print("   [OK] ConversionPageAgent created")
+
+    culturalIntelligenceAgent = CulturalIntelligenceAgent()
+    print("   [OK] CulturalIntelligenceAgent created")
     
     print("\n4. Creating agency...")
     agency = Agency(
         ceo,
         communication_flows=[
-            [ceo, researchAgent],
-            [researchAgent, ceo],
-            [ceo, searchVisibilityAgent],
-            [searchVisibilityAgent, ceo],
-            [researchAgent, searchVisibilityAgent],
-            [searchVisibilityAgent, researchAgent],
-            [ceo, adCopyAgent],
-            [searchVisibilityAgent, adCopyAgent],
-            [adCopyAgent, searchVisibilityAgent],
-            [ceo, imageCreatorAgent],
-            [ceo, facebookPolicyAgent],
-            [ceo, clientApprovalAgent],
-            [ceo, campaignOpsAgent],
-            [adCopyAgent, imageCreatorAgent],
-            [imageCreatorAgent, facebookPolicyAgent],
-            [facebookPolicyAgent, ceo],
-            [facebookPolicyAgent, clientApprovalAgent],
-            [clientApprovalAgent, ceo],
-            [clientApprovalAgent, facebookManagerAgent],
-            [facebookManagerAgent, ceo],
-            [facebookManagerAgent, campaignOpsAgent],
-            [campaignOpsAgent, ceo],
+            (ceo, researchAgent),
+            (researchAgent, ceo),
+            (ceo, culturalIntelligenceAgent),
+            (culturalIntelligenceAgent, ceo),
+            (researchAgent, culturalIntelligenceAgent),
+            (culturalIntelligenceAgent, adCopyAgent),
+            (ceo, searchVisibilityAgent),
+            (searchVisibilityAgent, ceo),
+            (researchAgent, searchVisibilityAgent),
+            (searchVisibilityAgent, researchAgent),
+            (ceo, adCopyAgent),
+            (adCopyAgent, ceo),
+            (searchVisibilityAgent, adCopyAgent),
+            (adCopyAgent, searchVisibilityAgent),
+            (ceo, imageCreatorAgent),
+            (imageCreatorAgent, ceo),
+            (ceo, conversionPageAgent),
+            (conversionPageAgent, ceo),
+            (ceo, facebookPolicyAgent),
+            (ceo, clientApprovalAgent),
+            (ceo, campaignOpsAgent),
+            (ceo, performanceAnalystAgent),
+            (performanceAnalystAgent, ceo),
+            (campaignOpsAgent, performanceAnalystAgent),
+            (ceo, communityManagerAgent),
+            (communityManagerAgent, ceo),
+            (adCopyAgent, imageCreatorAgent),
+            (imageCreatorAgent, facebookPolicyAgent),
+            (facebookPolicyAgent, ceo),
+            (facebookPolicyAgent, clientApprovalAgent),
+            (clientApprovalAgent, ceo),
+            (clientApprovalAgent, facebookManagerAgent),
+            (facebookManagerAgent, ceo),
+            (facebookManagerAgent, campaignOpsAgent),
+            (campaignOpsAgent, ceo),
         ],
-        shared_instructions='./agency_manifesto.md',
+        shared_instructions="./agency_manifesto.md",
     )
     print("   [OK] Agency created successfully")
     
@@ -87,9 +116,9 @@ try:
     print(f"   - Entry point: {agency.entry_point.name if hasattr(agency, 'entry_point') else 'N/A'}")
     agent_count = len(agency.agents) if hasattr(agency, 'agents') else 0
     print(f"   - Number of agents: {agent_count}")
-    if agent_count != 9:
-        raise RuntimeError(f"Expected 9 agents, found {agent_count}")
-    print("   [OK] All 9 agents wired in agency")
+    if agent_count != 13:
+        raise RuntimeError(f"Expected 13 agents, found {agent_count}")
+    print("   [OK] All 13 agents wired in agency")
     
     print("\n" + "=" * 50)
     print("[SUCCESS] ALL TESTS PASSED - Agency is ready to run!")

@@ -73,6 +73,18 @@ check("list_campaigns returns at least 1", len(r["campaigns"]) >= 1)
 r = json.loads(CampaignScheduler(action="list_posts", campaign_id=campaign_id).run())
 check("list_posts returns 2 posts", len(r["posts"]) == 2)
 
+# Pause / resume campaign
+r = json.loads(CampaignScheduler(action="pause_campaign", campaign_id=campaign_id).run())
+check("pause_campaign returns paused", r.get("status") == "paused", r)
+r = json.loads(CampaignScheduler(action="list_campaigns").run())
+paused_row = next((c for c in r["campaigns"] if c["id"] == campaign_id), {})
+check("list_campaigns shows paused status", paused_row.get("status") == "paused", paused_row)
+r = json.loads(CampaignScheduler(action="resume_campaign", campaign_id=campaign_id).run())
+check("resume_campaign returns resumed", r.get("status") == "resumed", r)
+r = json.loads(CampaignScheduler(action="update_post_status", campaign_id=campaign_id,
+    post_id=post_id_2, new_status="live").run())
+check("past post can be set live again after resume", r.get("status") == "updated")
+
 # ─────────────────────────────────────────────────────────────────
 # 2. PostTracker
 # ─────────────────────────────────────────────────────────────────

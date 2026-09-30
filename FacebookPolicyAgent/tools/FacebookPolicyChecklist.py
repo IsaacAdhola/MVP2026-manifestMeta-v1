@@ -1,7 +1,18 @@
 from agency_swarm.tools import BaseTool
 from pydantic import Field
 
+import os
+import sys
+
+_NESTED = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_ROOT = os.path.dirname(_NESTED)
+for _path in (_NESTED, _ROOT):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
+
+from claims_ledger import evaluate_and_store, parse_claim_records, reuse_results_to_concerns
 from safe_audit_log import write_audit_event
+from workflow_state import get_media_package, set_state_value
 
 
 SENSITIVE_ATTRIBUTE_TERMS = {
@@ -86,19 +97,44 @@ class FacebookPolicyChecklist(BaseTool):
         default=False,
         description="Whether the client authorized this post/ad to move toward publishing.",
     )
+    claims_json: str = Field(
+        default="",
+        description=(
+            "JSON list of claim records covering the caption AND the picture. "
+            "Each record needs claim type (puffery, fact, regulated), source for facts, "
+            "founder proof for regulated claims, review-by date for facts, image claims, "
+            "and live placements when the line is already live."
+        ),
+    )
+    image_reviewed: bool = Field(
+        default=False,
+        description=(
+            "True when the picture was reviewed on the same record as the caption "
+            "(star badge, before-and-after, baked-in text), not caption-only."
+        ),
+    )
+    as_of_date: str = Field(
+        default="",
+        description="ISO date for stale-fact checks. Leave empty to use today (UTC).",
+    )
 
     def _contains_any(self, text: str, terms: set[str]) -> list[str]:
         normalized = text.lower()
         return sorted(term for term in terms if term in normalized)
 
     def run(self):
+        pkg = get_media_package()
+        caption = (self.caption_or_body or pkg.get("ad_copy") or "").strip()
+        headline = (self.headline or pkg.get("ad_headline") or "").strip()
+        destination = (self.destination_link or pkg.get("destination_link") or "").strip()
+        audience = (self.audience_or_targeting or pkg.get("geography") or "").strip()
         review_text = " ".join(
             [
-                self.caption_or_body,
-                self.headline,
+                caption,
+                headline,
                 self.call_to_action,
                 self.image_description,
-                self.audience_or_targeting,
+                audience,
             ]
         )
 
@@ -144,7 +180,7 @@ class FacebookPolicyChecklist(BaseTool):
                 }
             )
 
-        if "http://" in self.destination_link.lower():
+        if "http://" in destination.lower():
             concerns.append(
                 {
                     "severity": "revise",
@@ -164,6 +200,20 @@ class FacebookPolicyChecklist(BaseTool):
                 }
             )
 
+        claims_payload: object = self.claims_json
+        if self.claims_json.strip():
+            records = parse_claim_records(self.claims_json)
+            if self.image_reviewed:
+                for record in records:
+                    record.image_reviewed = True
+            claims_payload = [item.model_dump(mode="json") for item in records]
+        ledger = evaluate_and_store(
+            claims_payload,
+            image_description=self.image_description,
+            as_of=self.as_of_date or None,
+        )
+        concerns.extend(reuse_results_to_concerns(ledger.get("results") or []))
+
         outcome = "approved"
         if any(item["severity"] == "blocked" for item in concerns):
             outcome = "blocked"
@@ -174,9 +224,19 @@ class FacebookPolicyChecklist(BaseTool):
             "outcome": outcome,
             "campaign_type": self.campaign_type,
             "concerns": concerns,
+            "claims_ledger": ledger,
             "reference": "FacebookPolicyAgent/files/facebook_policy_reference_file-Xn42Zik8DqZd4Y9MNsxrJp.md",
             "next_step": self._next_step(outcome),
         }
+        set_state_value("policy_outcome", outcome)
+        set_state_value(
+            "policy_review",
+            {
+                "outcome": outcome,
+                "concern_count": len(concerns),
+                "claims_ledger_outcome": ledger.get("outcome"),
+            },
+        )
         write_audit_event(
             event_type="facebook_policy_review",
             actor="Facebook Policy Compliance Officer",

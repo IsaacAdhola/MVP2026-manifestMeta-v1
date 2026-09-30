@@ -2,6 +2,17 @@
 .env
 .env.local
 .env.*.local
+.secret.local
+firebase-staging-key.json
+manifest-ai-meta-firebase-adminsdk-*.json
+*-firebase-adminsdk-*.json
+.slack_threads/
+.slack/apps.json
+.slack/apps.dev.json
+.slack/cache/
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
 
 # Python
 __pycache__/

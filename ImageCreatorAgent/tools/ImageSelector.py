@@ -33,6 +33,7 @@ class ImageSelector(BaseTool):
         selected_path = match["image_path"]
         set_state_value("image_path", selected_path)
         set_state_value("selected_image_option", self.selected_option)
+        set_state_value("pending_client_images", False)
 
         return json.dumps({
             "selected_option": self.selected_option,

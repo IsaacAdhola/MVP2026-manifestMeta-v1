@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_GPT
 
 
 class CampaignOpsAgent(Agent):
@@ -10,10 +11,10 @@ class CampaignOpsAgent(Agent):
                 "client budget management, and client-facing reporting. "
                 "Does not create copy, images, or ads."
             ),
-            model="gpt-4o",
+            model=MODEL_GPT,
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools",
         )

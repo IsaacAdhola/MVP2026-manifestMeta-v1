@@ -18,7 +18,8 @@ def send(message: str, label: str = "CLIENT") -> str:
     print(f"\n{'─' * 70}")
     print(f"  {label}: {message}")
     print(f"{'─' * 70}")
-    response = agency.get_completion(message)
+    result = agency.get_response_sync(message)
+    response = getattr(result, "final_output", result)
     print(f"\n  MANIFEST AI:\n")
     print(f"  {response}")
     return response

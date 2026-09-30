@@ -10,12 +10,16 @@ from AdCopyAgent.tools.AdCopyGenerator import AdCopyGenerator
 from CampaignOpsAgent import CampaignOpsAgent
 from ClientApprovalAgent import ClientApprovalAgent
 from ClientApprovalAgent.tools.ClientApprovalChecklist import ClientApprovalChecklist
+from CommunityManagerAgent import CommunityManagerAgent
+from ConversionPageAgent import ConversionPageAgent
+from CulturalIntelligenceAgent import CulturalIntelligenceAgent
 from FacebookManagerAgent import FacebookManagerAgent
 from FacebookPolicyAgent import FacebookPolicyAgent
 from FacebookPolicyAgent.tools.FacebookPolicyChecklist import FacebookPolicyChecklist
 from ImageCreatorAgent import ImageCreatorAgent
 from ImageCreatorAgent.tools.ImageGenerator import ImageGenerator
 from MetaMarkCEO import MetaMarkCEO
+from PerformanceAnalystAgent import PerformanceAnalystAgent
 from ResearchAgent import ResearchAgent
 from ResearchAgent.tools.AdLibraryPatternAnalyzer import AdLibraryPatternAnalyzer
 from ResearchAgent.tools.CompetitorResearchPlanBuilder import CompetitorResearchPlanBuilder
@@ -30,13 +34,17 @@ from workflow_state import clear_state, get_state_value, set_state_value
 AGENT_CLASSES = [
     ("Chief Growth Strategist", MetaMarkCEO),
     ("Market Intelligence Director", ResearchAgent),
+    ("Cultural Intelligence Director", CulturalIntelligenceAgent),
     ("Search & Answer Visibility Director", SearchVisibilityAgent),
     ("Senior Conversion Copywriter", AdCopyAgent),
+    ("Landing Page & CRO Director", ConversionPageAgent),
     ("Creative Director", ImageCreatorAgent),
     ("Facebook Policy Compliance Officer", FacebookPolicyAgent),
     ("Client Approval Manager", ClientApprovalAgent),
     ("Media Operations Director", FacebookManagerAgent),
     ("Campaign Operations Director", CampaignOpsAgent),
+    ("Community Manager", CommunityManagerAgent),
+    ("Performance Analyst", PerformanceAnalystAgent),
 ]
 
 REQUIRED_HANDOFFS = {
@@ -49,7 +57,9 @@ REQUIRED_HANDOFFS = {
     ("searchVisibilityAgent", "adCopyAgent"),
     ("adCopyAgent", "searchVisibilityAgent"),
     ("ceo", "adCopyAgent"),
+    ("adCopyAgent", "ceo"),
     ("ceo", "imageCreatorAgent"),
+    ("imageCreatorAgent", "ceo"),
     ("ceo", "facebookPolicyAgent"),
     ("ceo", "clientApprovalAgent"),
     ("ceo", "campaignOpsAgent"),
@@ -62,6 +72,17 @@ REQUIRED_HANDOFFS = {
     ("facebookManagerAgent", "ceo"),
     ("facebookManagerAgent", "campaignOpsAgent"),
     ("campaignOpsAgent", "ceo"),
+    ("ceo", "culturalIntelligenceAgent"),
+    ("culturalIntelligenceAgent", "ceo"),
+    ("researchAgent", "culturalIntelligenceAgent"),
+    ("culturalIntelligenceAgent", "adCopyAgent"),
+    ("ceo", "conversionPageAgent"),
+    ("conversionPageAgent", "ceo"),
+    ("ceo", "performanceAnalystAgent"),
+    ("performanceAnalystAgent", "ceo"),
+    ("campaignOpsAgent", "performanceAnalystAgent"),
+    ("ceo", "communityManagerAgent"),
+    ("communityManagerAgent", "ceo"),
 }
 
 FORBIDDEN_HANDOFFS = {
@@ -113,6 +134,42 @@ def test_shared_state_contract() -> None:
     clear_state()
     assert_true(get_state_value("handoff_status") is None, "clear_state did not clear state")
     print("   [OK] workflow_state set/get/clear")
+
+
+def test_media_package_contract() -> None:
+    print("\n3b. Testing shared media package...")
+    from workflow_state import (
+        clear_state,
+        get_media_package,
+        missing_for_organic,
+        missing_for_paid,
+        set_state_value,
+    )
+
+    clear_state()
+    set_state_value(
+        "client_brief",
+        {
+            "business": "Atlas Peak Coffee",
+            "campaign_type": "organic",
+            "geography": "Austin, United States",
+            "destination_link": "https://example.com",
+            "budget": "50",
+        },
+    )
+    set_state_value("ad_copy", "Fresh roast, weekly.")
+    set_state_value("ad_headline", "Atlas Peak")
+    set_state_value("image_path", "generated_assets/images/demo.png")
+    set_state_value("policy_outcome", "approved")
+    set_state_value("client_approval_outcome", "approved")
+    package = get_media_package()
+    assert_true(package["country_code"] == "US", "Geography should map to US")
+    assert_true(package["daily_budget_cents"] == 5000, "Budget 50 should become 5000 cents")
+    assert_true(not missing_for_organic(package), f"Organic package should be complete: {missing_for_organic(package)}")
+    assert_true(not missing_for_paid(package), f"Paid package should be complete: {missing_for_paid(package)}")
+    clear_state()
+    assert_true("ad_copy" in missing_for_organic(), "Empty state should miss ad_copy")
+    print("   [OK] media package shared state")
 
 
 def test_safe_audit_log_contract() -> None:
@@ -195,6 +252,8 @@ def test_policy_gate() -> None:
         client_approved=True,
     ).run()
     assert_true(approved["outcome"] == "approved", "Safe sample should be approved")
+    from workflow_state import get_state_value
+    assert_true(get_state_value("policy_outcome") == "approved", "Policy outcome must persist in shared state")
 
     blocked = FacebookPolicyChecklist(
         caption_or_body="Guaranteed results for people in debt with a new loan offer.",
@@ -387,7 +446,10 @@ def test_ceo_intro_contract() -> None:
         "research-backed facebook campaigns with clear strategy, strong creative, compliance review, and smooth meta execution" in ceo_lower,
         "CEO missing complete short introduction sentence",
     )
-    assert_true("coffee shop campaign" in ceo_lower, "CEO missing request-specific intro example")
+    assert_true(
+        "never substitute" in ceo_lower and "demo brand" in ceo_lower,
+        "CEO must use the client's actual business, not a leftover coffee demo",
+    )
     assert_true("first sentence" in ceo_lower, "CEO intro must be first sentence")
     assert_true(
         "do not mention agents, tools, files, prompts, apis" in ceo_lower,
@@ -415,7 +477,9 @@ def main() -> None:
     test_agent_instantiation()
     test_tool_imports()
     test_shared_state_contract()
+    test_media_package_contract()
     test_safe_audit_log_contract()
+    test_error_logger_contract()
     test_safe_research_tools()
     test_policy_gate()
     test_client_approval_gate()

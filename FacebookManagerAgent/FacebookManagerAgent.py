@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_GPT
 
 
 class FacebookManagerAgent(Agent):
@@ -9,10 +10,10 @@ class FacebookManagerAgent(Agent):
                 "Executes Facebook Page publishing and paid Meta ad operations from approved copy, "
                 "creative, schedule, targeting, budget, and links. Does not write copy, create images, or conduct research."
             ),
-            model="gpt-4o",
+            model=MODEL_GPT,
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools"
         )

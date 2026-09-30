@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_CLAUDE, agent_model
 
 
 class AdCopyAgent(Agent):
@@ -9,10 +10,10 @@ class AdCopyAgent(Agent):
                 "Writes high-converting ad copy from approved strategy, audience, offer, "
                 "tone, and research insights. Does not conduct research, generate images, or execute media."
             ),
-            model="gpt-4o",
+            model=agent_model(MODEL_CLAUDE),
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools"
         )

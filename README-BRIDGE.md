@@ -40,8 +40,9 @@ The bridge never parses tool internals. It tails the same files your tools alrea
    - `client_approval_review` → `gate` (Approval: approved / revise + missing_approvals)
 3. **`campaign_data/schedule.json` + `budgets.json`** — CampaignOps tracking (Stage 8).
 
-The **CEO's client-facing text** comes from `agency.get_completion_stream(...)`. Agent→agent handoffs
-seen on the stream drive the flow animation; tool payloads are ignored on purpose.
+The **CEO's client-facing text** comes from `agency.get_response_stream(...)` (Agency Swarm v1.x;
+`get_completion_stream` was removed). Agent→agent handoffs seen on the stream drive the flow
+animation; tool payloads are ignored on purpose. Non-streaming paths use `client_gateway.run_client_turn`.
 
 **Images:** the bridge serves `generated_assets/` at the same relative path the tools stored, so the
 UI's `image_path` resolves directly. No hardcoded images in live mode — only what the Creative

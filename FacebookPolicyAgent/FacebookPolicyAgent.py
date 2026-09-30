@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_CLAUDE, agent_model
 
 
 class FacebookPolicyAgent(Agent):
@@ -9,10 +10,10 @@ class FacebookPolicyAgent(Agent):
                 "Reviews Facebook posts, paid ads, campaign claims, targeting notes, "
                 "and publishing plans against Meta policy references before media execution."
             ),
-            model="gpt-4o",
+            model=agent_model(MODEL_CLAUDE),
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools",
         )

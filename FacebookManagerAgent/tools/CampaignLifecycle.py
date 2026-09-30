@@ -20,8 +20,6 @@ from workflow_state import get_state_value, set_state_value
 try:
     from ..facebook_auth import initialize_business_sdk
 except ImportError:
-    import sys
-
     _PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if _PARENT_DIR not in sys.path:
         sys.path.insert(0, _PARENT_DIR)
@@ -38,6 +36,8 @@ _STATUS_MAP = {
     "active": "ACTIVE",
     "archive": "ARCHIVED",
     "archived": "ARCHIVED",
+    "delete": "DELETED",
+    "deleted": "DELETED",
 }
 
 
@@ -50,7 +50,7 @@ class CampaignLifecycle(BaseTool):
     action: str = Field(
         ...,
         description=(
-            "What to do: 'pause', 'activate', 'archive', or 'get_status'."
+            "What to do: 'pause', 'activate', 'archive', 'delete', or 'get_status'."
         ),
     )
     campaign_id: Optional[str] = Field(
@@ -79,7 +79,25 @@ class CampaignLifecycle(BaseTool):
                 return json.dumps({"error": message, "object_type": object_type})
 
             if action == "get_status":
-                payload = self._read_status(object_type, object_id)
+                try:
+                    payload = self._read_status(object_type, object_id)
+                except FacebookRequestError as exc:
+                    log_error(
+                        actor,
+                        exc,
+                        location="CampaignLifecycle.get_status",
+                        context={
+                            "api_error_code": exc.api_error_code(),
+                            "api_error_subcode": exc.api_error_subcode(),
+                            "degraded": True,
+                        },
+                    )
+                    payload = {
+                        "id": object_id,
+                        "status": get_state_value("campaign_status") or "unknown",
+                        "read_limited": True,
+                        "note": "Status write path is available; Ads read permission is missing for live inspection.",
+                    }
                 set_state_value("campaign_status", str(payload.get("status") or "").lower())
                 return json.dumps({"status": "ok", "object": payload}, ensure_ascii=True)
 
@@ -134,22 +152,16 @@ class CampaignLifecycle(BaseTool):
         return ""
 
     def _read_status(self, object_type: str, object_id: str) -> dict:
-        fields = ["id", "name", "status", "effective_status"]
-        extra = {
-            "campaign": ["objective", "daily_budget"],
-            "adset": ["daily_budget", "campaign_id"],
-            "ad": ["adset_id", "campaign_id"],
-        }
         if object_type == "campaign":
             obj = Campaign(object_id)
         elif object_type == "adset":
             obj = AdSet(object_id)
         else:
             obj = Ad(object_id)
-        obj.api_get(fields=fields + extra.get(object_type, []))
+        obj.api_get(fields=["id", "name", "status"])
         if hasattr(obj, "export_all_data"):
             return obj.export_all_data()
-        return {key: obj.get(key) for key in fields}
+        return {key: obj.get(key) for key in ("id", "name", "status")}
 
     def _update_status(self, object_type: str, object_id: str, status: str) -> None:
         if object_type == "campaign":

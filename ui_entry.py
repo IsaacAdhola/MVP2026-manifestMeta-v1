@@ -5,10 +5,8 @@ Run this file to launch the agency as a web UI:
 
     python ui_entry.py
 
-The Gradio demo exposes only the user ↔ CEO (Chief Growth Strategist) conversation.
-All inter-agent communications (CEO → Research, Copy, Image, Policy, Approval,
-FacebookManager → CEO) are handled internally as background tool calls and are NOT
-surfaced as raw JSON or intermediate messages in the UI chat window.
+The Gradio demo exposes only the founder ↔ CEO conversation.
+Employee work (research, copy, image, policy, approval, media) stays inside the company and is not shown as raw tool output.
 
 To expose the UI on a specific port or host, pass --port and --host flags or set
 SERVER_HOST / SERVER_PORT environment variables.
@@ -17,6 +15,7 @@ Environment variables required (see .env):
     OPENAI_API_KEY, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET,
     FACEBOOK_ACCESS_TOKEN, FACEBOOK_PAGE_ID, FACEBOOK_AD_ACCOUNT_ID,
     SCRAPE_CREATORS_API_KEY
+    Optional model keys: ANTHROPIC_API_KEY or claude_api_key, XAI_API_KEY
 """
 from __future__ import annotations
 
@@ -26,8 +25,10 @@ import subprocess
 import sys
 
 from dotenv import load_dotenv
+from model_router import apply_provider_env
 
 load_dotenv()
+apply_provider_env()
 
 
 def _configure_console_encoding() -> None:
@@ -83,45 +84,7 @@ def main() -> None:
 
     # Import agency here so environment is already loaded
     print("[ui_entry] Importing agency (this can take a minute)...")
-    # #region agent log
-    try:
-        import json as _json
-        import time as _time
-        from pathlib import Path as _Path
-        _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-        with open(_log, "a", encoding="utf-8") as _f:
-            _f.write(_json.dumps({
-                "sessionId": "9c2ba9",
-                "runId": "pre-fix",
-                "hypothesisId": "F",
-                "location": "ui_entry.py:main:before_import",
-                "message": "about to import agency",
-                "data": {"host": args.host, "port": args.port},
-                "timestamp": int(_time.time() * 1000),
-            }, ensure_ascii=True) + "\n")
-    except Exception:
-        pass
-    # #endregion
     from agency import agency  # noqa: PLC0415
-    # #region agent log
-    try:
-        import json as _json
-        import time as _time
-        from pathlib import Path as _Path
-        _log = _Path(__file__).resolve().parent / "debug-9c2ba9.log"
-        with open(_log, "a", encoding="utf-8") as _f:
-            _f.write(_json.dumps({
-                "sessionId": "9c2ba9",
-                "runId": "pre-fix",
-                "hypothesisId": "F",
-                "location": "ui_entry.py:main:after_import",
-                "message": "agency import complete",
-                "data": {"agent_count": len(getattr(agency, "agents", []) or [])},
-                "timestamp": int(_time.time() * 1000),
-            }, ensure_ascii=True) + "\n")
-    except Exception:
-        pass
-    # #endregion
     print("[ui_entry] Agency imported. Launching Gradio...")
 
     # Ensure the image output folder exists so Gradio can whitelist it.
@@ -132,8 +95,8 @@ def main() -> None:
     print(
         f"\n[ui_entry] Starting Manifest AI Gradio UI at "
         f"http://{args.host}:{args.port}\n"
-        "Only the user ↔ Chief Growth Strategist conversation is visible in the UI.\n"
-        "Inter-agent communications run in the background.\n"
+            "Only the founder ↔ CEO conversation is visible in the UI.\n"
+            "Company employees work in the background.\n"
         f"Generated images served from: {image_dir.resolve()}\n"
     )
 

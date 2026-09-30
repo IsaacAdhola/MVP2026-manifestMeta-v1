@@ -1,5 +1,17 @@
-agency-swarm>=1.0.0
+agency-swarm>=1.11,<2
 facebook_business>=20.0.0
 openai>=1.30.0
 python-dotenv>=1.0.0
 requests>=2.31.0
+slack-bolt>=1.20.0
+slack-sdk>=3.33.0
+slack-cli-hooks>=0.3.0
+firebase-functions>=0.4.3
+firebase-admin>=6.5.0
+
+# Gradio UI (agency.py demo_gradio / ui_entry.py)
+gradio>=4.44.0
+
+# Web bridge (web_bridge.py)
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0

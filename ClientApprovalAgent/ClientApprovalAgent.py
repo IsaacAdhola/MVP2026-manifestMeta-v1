@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_CLAUDE, agent_model
 
 
 class ClientApprovalAgent(Agent):
@@ -9,10 +10,10 @@ class ClientApprovalAgent(Agent):
                 "Verifies final client approval for selected copy, selected creative, schedule, "
                 "budget, targeting, destination links, and policy approval before media execution."
             ),
-            model="gpt-4o",
+            model=agent_model(MODEL_CLAUDE),
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools",
         )

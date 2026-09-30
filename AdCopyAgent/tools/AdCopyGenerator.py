@@ -1,19 +1,19 @@
 from agency_swarm.tools import BaseTool
 from pydantic import Field
-from dotenv import load_dotenv
-import openai
-import os
 import json
+import os
 import re
 import sys
 from error_logger import log_error
-from workflow_state import set_state_value
+from workflow_state import copy_context, set_state_value
 
-load_dotenv()
+_AGENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_ROOT = os.path.dirname(_AGENT_DIR)
+for path in (_ROOT, _AGENT_DIR):
+    if path not in sys.path:
+        sys.path.insert(0, path)
 
-
-def _get_openai_client():
-    return openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+from copy_llm import complete_copy
 
 
 class AdCopyGenerator(BaseTool):
@@ -70,7 +70,6 @@ class AdCopyGenerator(BaseTool):
 
     def run(self):
         try:
-            client = _get_openai_client()
             sample_count = max(1, min(self.sample_count, 3))
             system_prompt = (
                 "You are an expert Facebook ad copywriter. "
@@ -78,9 +77,10 @@ class AdCopyGenerator(BaseTool):
                 "Respond only with the requested copy samples in the exact format specified."
             )
             user_prompt = (
+                f"{copy_context()}\n\n"
                 f"Generate {sample_count} distinct Facebook ad copy samples targeting "
                 f"{self.target_audience}, highlighting: {self.product_features}. "
-                f"Tone: {self.ad_tone}. Keep each Ad Copy under 100 characters.\n\n"
+                f"Tone: {self.ad_tone}. Keep each Ad Copy under 220 characters.\n\n"
                 "Use this exact format for each sample:\n"
                 "Option 1:\n"
                 "Headline: [headline]\n"
@@ -88,16 +88,7 @@ class AdCopyGenerator(BaseTool):
                 "Rationale: [one client-safe sentence explaining why this option could work]\n"
                 "(repeat for each option)"
             )
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=0.7,
-                max_tokens=400,
-            )
-            text = response.choices[0].message.content.strip()
+            text = complete_copy(system_prompt, user_prompt, max_tokens=1200)
             copy_options = self._parse_copy_options(text)
 
             if not copy_options:
@@ -111,6 +102,7 @@ class AdCopyGenerator(BaseTool):
             set_state_value("ad_copy_options", copy_options)
             set_state_value("ad_headline", selected["headline"])
             set_state_value("ad_copy", selected["ad_copy"])
+            set_state_value("pending_client_copy", True)
             return json.dumps({
                 "copy_options": copy_options,
                 "default_selected_option": 1,

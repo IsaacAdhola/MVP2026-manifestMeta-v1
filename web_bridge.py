@@ -27,7 +27,8 @@
 #        events: facebook_policy_review, client_approval_review (the two gates)
 #     3. campaign_data/schedule.json + budgets.json — CampaignOps tracking (Stage 8)
 #
-#   The CEO's client-facing text comes from agency.get_completion_stream(...).
+#   The CEO's client-facing text comes from agency.get_response_stream(...)
+#   (v1.x). Prefer client_gateway.run_client_turn for non-streaming UIs.
 #
 # Nothing else is sent to the browser. Tool payloads, prompts, tokens and file
 # paths never leave the server — gate data comes only from the sanitized audit
@@ -56,6 +57,7 @@ import uvicorn
 
 # Import the REAL agency unchanged.
 from agency import agency  # noqa: E402
+from error_logger import log_error  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 UI_DIR = ROOT / "web"
@@ -239,46 +241,67 @@ def run_agency_turn(text: str, loop, send_threadsafe):
 
     emit({"type": "ceo_start"})
     try:
-        stream = None
-        if hasattr(agency, "get_completion_stream"):
-            try:
-                stream = agency.get_completion_stream(text)
-            except TypeError:
-                stream = agency.get_completion_stream(message=text)
-        if stream is not None:
-            for item in stream:
-                ev = _probe_stream_item(item)
-                if ev:
-                    emit(ev)
+        if hasattr(agency, "get_response_stream"):
+            # get_response_stream is an async generator, so it needs its own
+            # event loop inside this worker thread.
+            asyncio.run(_stream_agency_turn(text, emit))
         else:
-            reply = agency.get_completion(text)
+            result = agency.get_response_sync(text)
+            reply = getattr(result, "final_output", result)
             emit({"type": "ceo_message", "text": str(reply)})
     except Exception as exc:
+        log_error(CEO, exc, location="web_bridge.py:run_agency_turn")
         emit({"type": "error", "message": f"engine error: {exc.__class__.__name__}"})
     finally:
         emit({"type": "run_complete"})
 
 
-def _probe_stream_item(item):
-    """Read one streamed Agency Swarm item. Versions differ — probe by attribute.
+async def _stream_agency_turn(text: str, emit):
+    """Consume one streamed turn, surfacing CEO text and agent-to-agent flow.
+
+    A failed turn is never retried here: the agency's tools publish real ads and
+    posts, so a re-run could duplicate live side effects.
+    """
+    last_pair = None
+    async for event in agency.get_response_stream(text):
+        for ev in _probe_stream_event(event, last_pair):
+            if ev["type"] == "flow":
+                last_pair = (ev["from"], ev["to"])
+            emit(ev)
+
+
+def _probe_stream_event(event, last_pair):
+    """Translate one agency-swarm v1.x stream event into zero or more UI events.
 
     We only surface CEO->user text and agent->agent handoffs (for the flow
-    animation). Tool output is intentionally ignored; real deliverables come
-    from the state/audit watchers instead.
+    animation). Tool-call deltas are intentionally ignored; real deliverables
+    come from the state/audit watchers instead.
     """
-    if isinstance(item, str):
-        return {"type": "ceo_delta", "text": item}
-    sender = str(getattr(item, "sender_name", None) or getattr(item, "sender", "") or "")
-    receiver = str(getattr(item, "receiver_name", None) or getattr(item, "receiver", "") or "")
-    content = getattr(item, "content", None)
-    if content is None:
-        content = getattr(item, "text", None)
+    # Validation/guardrail errors arrive as plain dicts.
+    if isinstance(event, dict):
+        if event.get("event", event.get("type")) == "error":
+            detail = event.get("content", event.get("data", "unknown"))
+            return [{"type": "error", "message": f"engine error: {detail}"}]
+        return []
 
-    if receiver == USER_NAME or (sender == CEO and receiver in ("", USER_NAME)):
-        return {"type": "ceo_delta", "text": str(content)} if content else None
-    if sender and receiver and sender != USER_NAME:
-        return {"type": "flow", "from": sender, "to": receiver}
-    return None
+    out = []
+
+    agent = str(getattr(event, "agent", "") or "")
+    caller = str(getattr(event, "callerAgent", "") or "")
+    if agent and caller and caller != USER_NAME:
+        pair = (caller, agent)
+        if pair != last_pair:
+            out.append({"type": "flow", "from": caller, "to": agent})
+
+    data = getattr(event, "data", None)
+    if data is not None and getattr(data, "type", None) == "response.output_text.delta":
+        # Only the CEO speaks to the client; sub-agent text stays internal.
+        if agent in ("", CEO):
+            delta = getattr(data, "delta", None)
+            if delta:
+                out.append({"type": "ceo_delta", "text": str(delta)})
+
+    return out
 
 
 # ===========================================================================

@@ -1,18 +1,22 @@
-# MetaMarkAgency
+# Manifest AI
 
-Welcome to the **MetaMarkAgency** repository, a cutting-edge solution designed to automate and enhance your Facebook marketing efforts using the power of AI. This SmmA agency is built upon the **Agency Swarm** framework, enabling the creation of specialized agents to handle different aspects of Facebook marketing: generating ad copy, creating images, and managing Facebook posts.
+Standalone **Meta digital marketing company**. The founder talks to the CEO. Employees research, write, design, check policy, and execute on Facebook after explicit go-live.
 
-### Agency Structure
+This repository is the company operating system (**Agency Swarm v1.x**). Framework install, Learn More docs, and migration notes: `AGENCY_SWARM_SETUP.md` and `../docs/adr/ADR-011-agency-swarm-v1-framework.md`. Founders do not clone it. Founders sign the paid pilot and work in Slack. See `../SMB_ONBOARDING_GUIDE.md` and `../docs/commercial/PILOT_SOW_AND_INVOICE.md`.
 
-The AI SmmA Live Agency is composed of three primary agents:
+**Company lock (ADR-010):** this Meta ads firm is Company One. Do not sell a seven-seat C-suite, $499 campaign packs, lead forms, lookalikes, or Instagram auto-publish. Honest scope lives in `agency_manifesto.md`.
 
-- **Ad Copy Agent**: Generates compelling ad copy tailored to your campaign's goals.
-- **Image Creator Agent**: Utilizes Dalle 3 to create visually appealing images that complement the ad copy.
-- **Facebook Manager Agent**: Handles the posting of ads on Facebook, along with campaign and ad set creation.
+### Company structure
 
-## Facebook App Setup
+- **CEO** — Chief Growth Strategist (only founder-facing voice)
+- **Employees** — Market Intelligence, Cultural Intelligence, Search Visibility, Copy, Landing/CRO, Creative, Policy, Approval, Media Operations, Campaign Operations, Community, Performance
 
-To utilize the Facebook Manager Agent for posting ads, you need to set up a Facebook app and obtain the necessary credentials and permissions. Follow these steps to get started:
+Paid execution today: **traffic** campaigns (website / link clicks / country geo), created paused. Organic: Facebook Page photo and text/link posts.
+
+## Operator: Facebook App Setup
+
+To let Media Operations post and build ads, set up a Facebook app and credentials. This is operator work, not founder onboarding.
+
 
 1. **Create Your Facebook App**:
    - Visit the [Facebook for Developers](https://developers.facebook.com/) site and log in.

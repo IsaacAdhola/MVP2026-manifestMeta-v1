@@ -29,7 +29,8 @@ class AdCreator(BaseTool):
     """
     name: str = Field(..., description='Headline of the ad.')
     link: str = Field(
-        ..., description="The URL to which the ad will direct the user."
+        default="",
+        description="The URL to which the ad will direct the user. Uses shared state when empty.",
     )
 
     def _resolve_image_path(self, image_path: str) -> str:
@@ -48,6 +49,7 @@ class AdCreator(BaseTool):
             campaign_id = get_state_value("campaign_id")
             ad_copy = get_state_value("ad_copy")
             ad_headline = get_state_value("ad_headline")
+            link = (self.link or get_state_value("destination_link") or "").strip()
 
             if not image_path:
                 raise ValueError('Please tell Image Creator agent to generate an image first.')
@@ -57,6 +59,8 @@ class AdCreator(BaseTool):
                 raise ValueError('Campaign ID not found. Please use AdCampaignStarter tool first.')
             if not ad_copy:
                 raise ValueError('Please use AdCopyGenerator tool to generate ad copy first.')
+            if not link:
+                raise ValueError('Destination link not found. Record it in the client brief first.')
 
             resolved_image_path = self._resolve_image_path(image_path)
             if not os.path.exists(resolved_image_path):
@@ -72,7 +76,7 @@ class AdCreator(BaseTool):
                 'link_data': {
                     'image_hash': image.get_hash(),
                     "call_to_action": {'type': 'LEARN_MORE'},
-                    'link': self.link,
+                    'link': link,
                     "name": ad_headline,
                     "message": ad_copy,
                 }

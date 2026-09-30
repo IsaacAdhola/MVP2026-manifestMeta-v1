@@ -8,7 +8,7 @@ from facebook_business.adobjects.adset import AdSet
 
 from dotenv import load_dotenv
 from error_logger import log_error
-from workflow_state import get_state_value, set_state_value
+from workflow_state import country_code_from_geography, get_state_value, set_state_value
 try:
     from ..facebook_auth import get_required_env, initialize_business_sdk
 except ImportError:
@@ -50,15 +50,17 @@ class AdSetCreator(BaseTool):
             params = {
                 'campaign_id': campaign_id,
                 'name': self.name,
-                'targeting': {"geo_locations": {"countries": ["US"]}},
+                'targeting': {"geo_locations": {"countries": [country_code_from_geography()]}},
                 'start_time': datetime.now(timezone.utc).isoformat(),
                 'end_time': (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
                 'status': ad_set_status,
-                'daily_budget': self.budget,
                 "billing_event": "IMPRESSIONS",
                 'optimization_goal': "LINK_CLICKS",
-                "bid_amount": "100",
+                'destination_type': 'WEBSITE',
             }
+            if get_state_value("budget_level") != "campaign":
+                params["daily_budget"] = self.budget
+                params["bid_strategy"] = "LOWEST_COST_WITHOUT_CAP"
             ad_set = ad_account.create_ad_set(params=params)
             set_state_value("ad_set_id", ad_set["id"])
             return (

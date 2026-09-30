@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_GROK, agent_model
 
 
 class ResearchAgent(Agent):
@@ -10,10 +11,10 @@ class ResearchAgent(Agent):
                 "audiences, demographics, and ad-library patterns. This is the only "
                 "agent with access to competitor ad research tools."
             ),
-            model="gpt-4o",
+            model=agent_model(MODEL_GROK),
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools",
         )

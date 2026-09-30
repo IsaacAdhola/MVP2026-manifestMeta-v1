@@ -49,6 +49,8 @@ class FacebookTokenDiagnostics(BaseTool):
 
         data = debug.get("data", {})
         token_error = data.get("error")
+        if not token_error and isinstance(debug.get("error"), dict):
+            token_error = debug.get("error")
         scopes = sorted(data.get("scopes", []) or [])
 
         result: dict[str, Any] = {

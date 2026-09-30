@@ -2,6 +2,7 @@ from agency_swarm.tools import BaseTool
 from pydantic import Field
 
 from safe_audit_log import write_audit_event
+from workflow_state import get_state_value, set_state_value
 
 
 class ClientApprovalChecklist(BaseTool):
@@ -43,13 +44,14 @@ class ClientApprovalChecklist(BaseTool):
     )
 
     def run(self):
+        policy_ok = self.policy_approved or get_state_value("policy_outcome") == "approved"
         required_checks = {
             "selected_copy_approved": self.selected_copy_approved,
             "selected_image_approved": self.selected_image_approved,
             "schedule_approved": self.schedule_approved,
             "budget_and_targeting_approved": self.budget_and_targeting_approved,
             "destination_link_approved": self.destination_link_approved,
-            "policy_approved": self.policy_approved,
+            "policy_approved": policy_ok,
             "final_client_authorization": self.final_client_authorization,
         }
         missing = [name for name, approved in required_checks.items() if not approved]
@@ -66,6 +68,8 @@ class ClientApprovalChecklist(BaseTool):
                 else "Return missing approval items to the Chief Growth Strategist before media execution."
             ),
         }
+        set_state_value("client_approval_outcome", outcome)
+        set_state_value("approved_for_media_operations", outcome == "approved")
         write_audit_event(
             event_type="client_approval_review",
             actor="Client Approval Manager",

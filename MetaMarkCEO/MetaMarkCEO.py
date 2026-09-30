@@ -1,4 +1,5 @@
-from agency_swarm.agents import Agent
+from agency_swarm import Agent
+from model_router import MODEL_CLAUDE, agent_model
 
 
 class MetaMarkCEO(Agent):
@@ -9,10 +10,10 @@ class MetaMarkCEO(Agent):
                 "Acts as Manifest AI's executive client lead. Owns client intake, "
                 "strategic direction, specialist delegation, and premium client-facing communication."
             ),
-            model="gpt-4o",
+            model=agent_model(MODEL_CLAUDE),
             instructions="./instructions.md",
-            files_folder="./files",
-            schemas_folder="./schemas",
+            files_folder=None,
+            schemas_folder=None,
             tools=[],
             tools_folder="./tools"
         )

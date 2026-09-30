@@ -44,14 +44,17 @@ class AdCampaignStarter(BaseTool):
             )
             params = {
                 'name': self.campaign_name,
-                'objective': "OUTCOME_LEADS",
+                'objective': "OUTCOME_TRAFFIC",
                 'status': campaign_status,
                 'daily_budget': self.budget,
                 'special_ad_categories': [],
+                'bid_strategy': 'LOWEST_COST_WITHOUT_CAP',
 
             }
             campaign = ad_account.create_campaign(params=params)
             set_state_value("campaign_id", campaign["id"])
+            set_state_value("daily_budget_cents", self.budget)
+            set_state_value("budget_level", "campaign")
             return (
                 f'Ad campaign {self.campaign_name} has been successfully started '
                 f'with ID {campaign["id"]} in status {campaign_status}.'

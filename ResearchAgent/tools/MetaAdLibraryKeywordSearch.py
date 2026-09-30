@@ -72,6 +72,13 @@ class MetaAdLibraryKeywordSearch(BaseTool):
         try:
             return graph_get("ads_archive", params)
         except ValueError as exc:
+            from error_logger import log_error
+
+            log_error(
+                "Market Intelligence Director",
+                exc,
+                location="MetaAdLibraryKeywordSearch.run",
+            )
             return {
                 "ok": False,
                 "error": str(exc),
